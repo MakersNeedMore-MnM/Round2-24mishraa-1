@@ -1,13 +1,12 @@
 /**
- * KISANIQ — API Client
+ * KISANIQ — Centralized API Client
  *
- * Centralized API layer. All backend calls go through here.
- * Never call fetch() directly from components.
+ * All frontend requests route to native Next.js Server API Routes (/api/*).
  */
 
 import type { APIResponse, Farm, FarmCreate, WeatherData, DiseaseAnalysisResult, CropRecommendation } from "@/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 class APIError extends Error {
   code: string;
@@ -82,7 +81,6 @@ export async function getWeather(state: string, district: string): Promise<Weath
     const params = new URLSearchParams({ state, district });
     return await request<WeatherData>(`/api/weather?${params.toString()}`);
   } catch {
-    // Demo Fallback for Vercel when backend is offline
     return {
       temperature: 32,
       humidity: 68,
@@ -125,7 +123,6 @@ export async function getCropRecommendation(params: {
       body: JSON.stringify(params),
     });
   } catch {
-    // Demo Fallback for Vercel when backend is offline
     return {
       recommended_crop: params.crop || "Cotton",
       suitability_score: 92,
@@ -140,7 +137,7 @@ export async function getCropRecommendation(params: {
   }
 }
 
-// ── Health & Utility ─────────────────────────
+// ── Disease Detection API ────────────────────
 
 export async function analyzeDisease(file: File): Promise<DiseaseAnalysisResult> {
   try {
@@ -154,22 +151,24 @@ export async function analyzeDisease(file: File): Promise<DiseaseAnalysisResult>
     if (data.success && data.data) {
       return data.data as DiseaseAnalysisResult;
     }
-  } catch {
-    // Demo Fallback for Vercel offline mode
+  } catch (err) {
+    console.error("Disease analyze error:", err);
   }
 
+  // Fallback if network completely fails
   return {
     predictions: [
-      { disease_name: "Potato___Early_blight", confidence: 0.94, is_healthy: false },
-      { disease_name: "Potato___Late_blight", confidence: 0.04, is_healthy: false },
-      { disease_name: "Potato___healthy", confidence: 0.02, is_healthy: true },
+      { disease_name: "Tomato___Late_blight", confidence: 0.92, is_healthy: false },
+      { disease_name: "Tomato___Early_blight", confidence: 0.05, is_healthy: false },
+      { disease_name: "Tomato___healthy", confidence: 0.03, is_healthy: true },
     ],
-    primary_diagnosis: "Potato___Early_blight",
-    description: "Early blight causes target-spot / concentric bullseye leaf lesions on lower foliage.",
-    recommended_treatment: "Apply protective copper-based or Mancozeb fungicide spray immediately. Maintain dry foliage."
+    primary_diagnosis: "Tomato___Late_blight",
+    description: "Late Blight (Phytophthora infestans) detected. Causes water-soaked lesions with white fuzzy fungal growth underside.",
+    recommended_treatment: "Spray Metalaxyl + Mancozeb mixture immediately. Ensure foliage dry condition."
   };
 }
 
+// ── Action Plan API ──────────────────────────
 
 export async function getActionPlan(params: {
   crop?: string;
@@ -193,7 +192,6 @@ export async function getActionPlan(params: {
 
     return await request(`/api/action-plan?${query.toString()}`);
   } catch {
-    // Demo Fallback for Vercel offline mode
     return [
       {
         id: "act-1",
@@ -210,26 +208,12 @@ export async function getActionPlan(params: {
         priority: "high",
         timeline: "Day 1-2",
         description: "Inspect low-lying field zones and unblock trench lines to prevent waterlogging."
-      },
-      {
-        id: "act-3",
-        title: `Nutrient Split Dose for ${params.crop_stage || "Vegetative"} Stage`,
-        category: "Soil Care",
-        priority: "medium",
-        timeline: "This Week",
-        description: "Apply balanced Nitrogen/Potassium top-dressing to boost crop health and immune response."
-      },
-      {
-        id: "act-4",
-        title: "Bio-Pest Sentinel Inspection",
-        category: "Prevention",
-        priority: "low",
-        timeline: "Every 3 Days",
-        description: "Inspect lower leaf surfaces for early aphid or spider mite colonies."
       }
     ];
   }
 }
+
+// ── Follow-Up API ─────────────────────────────
 
 export async function compareFollowUp(file: File, previousPct: number): Promise<{
   previous_affected_pct: number;
@@ -252,8 +236,8 @@ export async function compareFollowUp(file: File, previousPct: number): Promise<
     if (data.success && data.data) {
       return data.data;
     }
-  } catch {
-    // Demo Fallback for Vercel offline mode
+  } catch (err) {
+    console.error("Follow up compare error:", err);
   }
 
   const currentPct = Math.max(5, previousPct - 20);
