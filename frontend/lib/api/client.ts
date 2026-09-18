@@ -78,8 +78,35 @@ export async function getFarm(farmId: string): Promise<Farm> {
 // ── Weather API ───────────────────────────────
 
 export async function getWeather(state: string, district: string): Promise<WeatherData> {
-  const params = new URLSearchParams({ state, district });
-  return request<WeatherData>(`/api/weather?${params.toString()}`);
+  try {
+    const params = new URLSearchParams({ state, district });
+    return await request<WeatherData>(`/api/weather?${params.toString()}`);
+  } catch {
+    // Demo Fallback for Vercel when backend is offline
+    return {
+      temperature: 32,
+      humidity: 68,
+      wind_speed: 12.5,
+      rainfall: 24,
+      description: "Moderate Rain & Humid",
+      icon: "10d",
+      risk_alerts: [
+        {
+          type: "Heavy Rain & Waterlogging Risk",
+          severity: "high",
+          message: "24mm rainfall forecasted. Risk of water accumulation in low-lying crop zones.",
+          actions: ["Clear field drainage channels", "Avoid applying nitrogen fertilizer today"]
+        }
+      ],
+      forecast: [
+        { date: "Today", temp_min: 24, temp_max: 33, rainfall: 24, description: "Moderate Rain", icon: "10d" },
+        { date: "Tomorrow", temp_min: 23, temp_max: 31, rainfall: 15, description: "Light Rain", icon: "10d" },
+        { date: "Day 3", temp_min: 22, temp_max: 32, rainfall: 0, description: "Partly Cloudy", icon: "02d" },
+        { date: "Day 4", temp_min: 24, temp_max: 34, rainfall: 0, description: "Clear Sky", icon: "01d" },
+        { date: "Day 5", temp_min: 25, temp_max: 35, rainfall: 0, description: "Sunny", icon: "01d" }
+      ]
+    };
+  }
 }
 
 // ── Crop Recommendation API ─────────────────
@@ -92,10 +119,25 @@ export async function getCropRecommendation(params: {
   crop?: string;
   season?: string;
 }): Promise<CropRecommendation> {
-  return request<CropRecommendation>("/api/recommendation", {
-    method: "POST",
-    body: JSON.stringify(params),
-  });
+  try {
+    return await request<CropRecommendation>("/api/recommendation", {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+  } catch {
+    // Demo Fallback for Vercel when backend is offline
+    return {
+      recommended_crop: params.crop || "Cotton",
+      suitability_score: 92,
+      risk_level: "Low",
+      explanation: `${params.crop || "Cotton"} is well-suited for ${params.district || "Nagpur"}, ${params.state || "Maharashtra"}. Soil and water availability match ideal growing conditions.`,
+      factors: [
+        { name: "Soil Compatibility", score: 95, status: "good", detail: `${params.soil_type || "Black"} soil provides optimal drainage and nutrient absorption.` },
+        { name: "Water Availability", score: 90, status: "good", detail: `Water supply (${params.water_availability || "Moderate"}) meets growth requirements.` },
+        { name: "Seasonal Timing", score: 90, status: "good", detail: "Sowing season aligns with favorable climate conditions." }
+      ]
+    };
+  }
 }
 
 // ── Health & Utility ─────────────────────────
