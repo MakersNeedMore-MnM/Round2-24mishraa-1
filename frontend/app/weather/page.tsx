@@ -158,10 +158,13 @@ export default function WeatherPage() {
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                 {weather.forecast.map((day, idx) => {
-                  const date = new Date(day.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+                  const parsedDate = new Date(day.date);
+                  const dateLabel = !isNaN(parsedDate.getTime())
+                    ? parsedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
+                    : day.date;
                   return (
                     <div key={idx} className="bg-white border border-kisan-border rounded-xl p-3 text-center flex flex-col items-center">
-                      <p className="text-xs font-semibold text-kisan-text-light mb-1">{date}</p>
+                      <p className="text-xs font-semibold text-kisan-text-light mb-1">{dateLabel}</p>
                       {day.icon && (
                         <img 
                           src={`https://openweathermap.org/img/wn/${day.icon}.png`} 
