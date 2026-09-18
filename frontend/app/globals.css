@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════
+   KISANIQ Design System — Tailwind v4
+   ══════════════════════════════════════ */
+
+@theme inline {
+  /* Brand Colors */
+  --color-kisan-green-900: #1a3a2a;
+  --color-kisan-green-800: #1e4d35;
+  --color-kisan-green-700: #256741;
+  --color-kisan-green-600: #2d7d4f;
+  --color-kisan-green-500: #38955f;
+  --color-kisan-green-400: #4aad72;
+  --color-kisan-green-300: #6ec48e;
+  --color-kisan-green-200: #a3dbb5;
+  --color-kisan-green-100: #d4f0dc;
+  --color-kisan-green-50: #eef8f1;
+
+  --color-kisan-earth-900: #3d2e1e;
+  --color-kisan-earth-700: #6b4f35;
+  --color-kisan-earth-500: #9c7a56;
+  --color-kisan-earth-300: #c4a882;
+  --color-kisan-earth-100: #f0e6d8;
+  --color-kisan-earth-50: #faf6f0;
+
+  --color-kisan-sky-500: #3b82c4;
+  --color-kisan-sky-100: #dbeafe;
+
+  --color-kisan-warning: #e5a100;
+  --color-kisan-danger: #dc3545;
+  --color-kisan-success: #28a745;
+
+  --color-kisan-charcoal: #2c2c2c;
+  --color-kisan-text: #333333;
+  --color-kisan-text-light: #6b7280;
+  --color-kisan-bg: #faf9f6;
+  --color-kisan-card: #ffffff;
+  --color-kisan-border: #e5e2db;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Base ──────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-kisan-bg);
+  color: var(--color-kisan-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Focus Ring ─────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--color-kisan-green-500);
+  outline-offset: 2px;
+}
+
+/* ── Selection ──────────────────────────── */
+::selection {
+  background: var(--color-kisan-green-200);
+  color: var(--color-kisan-green-900);
+}

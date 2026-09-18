@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.next/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ML Models (large binary files)
+ml/models/*.pth
+ml/models/*.pt
+ml/models/*.h5
+ml/models/*.onnx
+
+# Datasets (large)
+ml/data/
+ml/datasets/
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+
+# Uploads
+backend/uploads/
