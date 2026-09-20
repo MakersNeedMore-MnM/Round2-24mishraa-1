@@ -142,7 +142,7 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 bg-emerald-100/80 border border-emerald-200 rounded-full px-4 py-1.5 mb-8">
               <span className="w-2 h-2 bg-emerald-600 rounded-full animate-pulse" />
               <span className="text-xs font-semibold text-emerald-900 tracking-wide uppercase">
-                AI-POWERED FARMER DECISION SUPPORT
+                {t.heroBadge}
               </span>
             </div>
 
@@ -192,20 +192,20 @@ export default function LandingPage() {
               {t.problemTitle}
             </h2>
             <p className="text-emerald-800 text-lg leading-relaxed mb-8">
-              Most crop disease tools stop at <span className="font-semibold text-emerald-950">detection</span>. They tell you <em>what</em> the disease is — but not <em>what to do about it</em>. Without understanding severity, weather risk, and the right timing, detection alone isn&apos;t enough to protect your crop.
+              {t.problemBody}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="bg-emerald-50/60 rounded-xl p-5 border border-emerald-100">
                 <span className="text-3xl block mb-2" aria-hidden="true">📱</span>
-                <p className="text-sm text-emerald-900 font-medium">Existing tools give you a disease name</p>
+                <p className="text-sm text-emerald-900 font-medium">{t.problemCard1}</p>
               </div>
               <div className="bg-emerald-50/60 rounded-xl p-5 border border-emerald-100">
                 <span className="text-3xl block mb-2" aria-hidden="true">❓</span>
-                <p className="text-sm text-emerald-900 font-medium">But not how severe it is or what to do</p>
+                <p className="text-sm text-emerald-900 font-medium">{t.problemCard2}</p>
               </div>
               <div className="bg-emerald-50/60 rounded-xl p-5 border border-emerald-100">
                 <span className="text-3xl block mb-2" aria-hidden="true">🌧️</span>
-                <p className="text-sm text-emerald-900 font-medium">And ignore weather, soil, and timing</p>
+                <p className="text-sm text-emerald-900 font-medium">{t.problemCard3}</p>
               </div>
             </div>
           </div>
@@ -219,21 +219,21 @@ export default function LandingPage() {
             {t.howItWorks}
           </h2>
           <p className="text-emerald-700/80 text-center max-w-xl mx-auto mb-12">
-            From your farm data to actionable decisions — a complete pipeline.
+            {t.pipelineSub}
           </p>
 
           <div className="flex flex-wrap items-start justify-center gap-4 sm:gap-2">
-            <PipelineStep icon="🌾" label="Farm Data" number={1} />
+            <PipelineStep icon="🌾" label={t.pipeline1} number={1} />
             <Arrow />
-            <PipelineStep icon="🌦️" label="Weather" number={2} />
+            <PipelineStep icon="🌦️" label={t.pipeline2} number={2} />
             <Arrow />
-            <PipelineStep icon="📸" label="Crop Image" number={3} />
+            <PipelineStep icon="📸" label={t.pipeline3} number={3} />
             <Arrow />
-            <PipelineStep icon="🤖" label="AI Analysis" number={4} />
+            <PipelineStep icon="🤖" label={t.pipeline4} number={4} />
             <Arrow />
-            <PipelineStep icon="⚠️" label="Risk" number={5} />
+            <PipelineStep icon="⚠️" label={t.pipeline5} number={5} />
             <Arrow />
-            <PipelineStep icon="✅" label="Decision" number={6} />
+            <PipelineStep icon="✅" label={t.pipeline6} number={6} />
           </div>
         </div>
       </section>
@@ -249,70 +249,33 @@ export default function LandingPage() {
             <CapabilityCard
               icon="🌱"
               title={t.navRecommendation}
-              description="Get crop suitability scores based on your soil, water availability, season, and expected weather — with transparent factor-by-factor breakdown."
+              description={t.cap1Desc}
             />
             <CapabilityCard
               icon="🌦️"
               title={t.navWeather}
-              description="Live weather data converted into farming-specific risk alerts — waterlogging risk, heat stress, dry spell warnings, and more."
+              description={t.cap2Desc}
             />
             <CapabilityCard
               icon="🔬"
               title={t.navDisease}
-              description="Upload a crop leaf image for AI-powered disease classification with confidence scoring and estimated visible affected area."
+              description={t.cap3Desc}
             />
             <CapabilityCard
               icon="📊"
-              title="Severity Assessment"
-              description="Estimate the visible affected area of your crop using image analysis. Understand whether the situation is low, moderate, or high severity."
+              title={t.severityTitle}
+              description={t.severityDesc}
             />
             <CapabilityCard
               icon="📋"
               title={t.navActionPlan}
-              description="Context-aware recommendations: what to do now, what to monitor, and when to seek expert help — tailored to your crop, stage, and conditions."
+              description={t.cap5Desc}
             />
             <CapabilityCard
               icon="🔄"
               title={t.navFollowUp}
-              description="Track your crop's recovery by comparing images over time. See whether conditions are improving, stable, or worsening."
+              description={t.cap6Desc}
             />
-          </div>
-        </div>
-      </section>
-
-      {/* Detection -> Decision */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-emerald-950 text-center mb-4">
-              From Detection to Decision
-            </h2>
-            <p className="text-emerald-700/80 text-center mb-10">
-              KISANIQ goes beyond identification.
-            </p>
-
-            <div className="bg-white rounded-2xl border border-emerald-100 p-6 sm:p-8 shadow-xs space-y-5">
-              <DifferentiatorRow
-                before="Disease name only"
-                after="Disease + severity + affected area"
-              />
-              <DifferentiatorRow
-                before="No context"
-                after="Weather + soil + crop stage"
-              />
-              <DifferentiatorRow
-                before="Generic advice"
-                after="Context-aware action plan"
-              />
-              <DifferentiatorRow
-                before="One-time scan"
-                after="Follow-up monitoring"
-              />
-              <DifferentiatorRow
-                before="Black-box AI"
-                after="Transparent confidence scoring"
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -324,7 +287,7 @@ export default function LandingPage() {
             {t.readyToStart}
           </h2>
           <p className="text-emerald-200 mb-8 max-w-lg mx-auto">
-            Start with your farm profile. Get crop recommendations, weather alerts, and AI-powered disease analysis.
+            {t.finalCtaSubtitle}
           </p>
           <Link
             href="/farm/new"
@@ -346,7 +309,7 @@ export default function LandingPage() {
               <span className="font-bold text-white text-sm">KISANIQ</span>
             </div>
             <p className="text-xs text-center sm:text-right text-emerald-400">
-              Built by Team 4Bits for Morrow 1.0
+              {t.footerText}
             </p>
           </div>
         </div>

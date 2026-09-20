@@ -11,34 +11,36 @@ import {
   Alert,
   PageHeader,
 } from "@/components/ui";
-import { createFarm, APIError } from "@/lib/api/client";
+import { createFarm } from "@/lib/api/client";
 import type { FarmCreate } from "@/types";
 import {
   CROP_STAGES,
   SOIL_TYPES,
   WATER_AVAILABILITY,
   INDIAN_STATES,
-  COMMON_CROPS,
 } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 /**
  * KISANIQ — Farm Profile Creation
  *
  * Mobile-first onboarding form.
- * Connected to POST /api/farms.
+ * Connected to POST /api/farms with full multi-language support.
  */
 
 type FormErrors = Partial<Record<keyof FarmCreate, string>>;
 
 export default function NewFarmPage() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   // ── Form State ─────────────────────────────
   const [form, setForm] = useState<FarmCreate>({
     farmer_name: "",
     state: "",
     district: "",
-    crop: "",
+    crop: "Soybean",
     crop_stage: "",
     soil_type: "",
     water_availability: "",
@@ -48,19 +50,57 @@ export default function NewFarmPage() {
     ph: null,
   });
 
+  const [selectedCropOption, setSelectedCropOption] = useState("Soybean");
+  const [customCropName, setCustomCropName] = useState("");
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showOptional, setShowOptional] = useState(false);
 
-  // ── Districts for selected state ───────────
+  // ── Options ───────────────────────────────
   const districts = useMemo(() => {
     if (!form.state) return [];
     return INDIAN_STATES[form.state] || [];
   }, [form.state]);
 
-  // ── State Options ──────────────────────────
   const stateOptions = Object.keys(INDIAN_STATES);
+
+  const cropSelectOptions = [
+    { value: "Soybean", label: t.crops.soybean || "Soybean" },
+    { value: "Cotton", label: t.crops.cotton || "Cotton" },
+    { value: "Rice", label: t.crops.rice || "Rice" },
+    { value: "Wheat", label: t.crops.wheat || "Wheat" },
+    { value: "Maize", label: t.crops.maize || "Maize" },
+    { value: "Sugarcane", label: t.crops.sugarcane || "Sugarcane" },
+    { value: "Chickpea", label: t.crops.chickpea || "Chickpea" },
+    { value: "Groundnut", label: t.crops.groundnut || "Groundnut" },
+    { value: "Mustard", label: t.crops.mustard || "Mustard" },
+    { value: "Tomato", label: t.crops.tomato || "Tomato" },
+    { value: "Potato", label: t.crops.potato || "Potato" },
+    { value: "Onion", label: t.crops.onion || "Onion" },
+    { value: "Chilli", label: t.crops.chilli || "Chilli" },
+    { value: "Turmeric", label: t.crops.turmeric || "Turmeric" },
+    { value: "Mango", label: t.crops.mango || "Mango" },
+    { value: "Banana", label: t.crops.banana || "Banana" },
+    { value: "Grapes", label: t.crops.grapes || "Grapes" },
+    { value: "Custom", label: t.customCropOption },
+  ];
+
+  const stageOptions = CROP_STAGES.map((stg) => ({
+    value: stg,
+    label: t.stages[stg] || stg,
+  }));
+
+  const soilOptions = SOIL_TYPES.map((soil) => ({
+    value: soil,
+    label: t.soils[soil] || soil,
+  }));
+
+  const waterOptions = WATER_AVAILABILITY.map((water) => ({
+    value: water,
+    label: t.waterLevels[water] || water,
+  }));
 
   // ── Handlers ───────────────────────────────
   function updateField<K extends keyof FarmCreate>(
@@ -68,31 +108,32 @@ export default function NewFarmPage() {
     value: FarmCreate[K]
   ) {
     setForm((prev) => ({ ...prev, [field]: value }));
-    // Clear error on edit
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
-    // Reset district when state changes
     if (field === "state") {
       setForm((prev) => ({ ...prev, district: "" }));
     }
   }
 
+  const isCustomCrop = selectedCropOption === "Custom" || selectedCropOption.includes("Custom");
+
   function validate(): boolean {
     const newErrors: FormErrors = {};
 
-    if (!form.state) newErrors.state = "Please select your state";
-    if (!form.district) newErrors.district = "Please select your district";
-    if (!form.crop) newErrors.crop = "Please select your crop";
-    if (!form.crop_stage)
-      newErrors.crop_stage = "Please select the crop stage";
-    if (!form.soil_type) newErrors.soil_type = "Please select soil type";
-    if (!form.water_availability)
-      newErrors.water_availability = "Please select water availability";
+    const effectiveCrop = isCustomCrop
+      ? customCropName.trim()
+      : selectedCropOption || form.crop;
+
+    if (!form.state) newErrors.state = t.selectStatePlaceholder;
+    if (!form.district) newErrors.district = t.selectDistrictPlaceholder;
+    if (!effectiveCrop) newErrors.crop = t.selectCropPlaceholder;
+    if (!form.crop_stage) newErrors.crop_stage = t.selectStagePlaceholder;
+    if (!form.soil_type) newErrors.soil_type = t.selectSoilPlaceholder;
+    if (!form.water_availability) newErrors.water_availability = t.selectWaterPlaceholder;
 
     if (form.ph !== null && form.ph !== undefined) {
-      if (form.ph < 0 || form.ph > 14)
-        newErrors.ph = "pH must be between 0 and 14";
+      if (form.ph < 0 || form.ph > 14) newErrors.ph = "pH (0–14)";
     }
 
     setErrors(newErrors);
@@ -103,12 +144,21 @@ export default function NewFarmPage() {
     e.preventDefault();
     setSubmitError(null);
 
+    const effectiveCrop = isCustomCrop
+      ? (customCropName.trim() || "Custom Crop")
+      : selectedCropOption || form.crop || "Soybean";
+
+    const submitForm = {
+      ...form,
+      crop: effectiveCrop,
+    };
+
     if (!validate()) return;
 
     setSubmitting(true);
 
     try {
-      const farm = await createFarm(form);
+      const farm = await createFarm(submitForm);
       if (typeof window !== "undefined") {
         localStorage.setItem("kisaniq_farm_id", farm.id);
         localStorage.setItem("kisaniq_farm", JSON.stringify(farm));
@@ -118,17 +168,17 @@ export default function NewFarmPage() {
       // Demo Resilience: Save locally if backend server is offline
       const fallbackFarm = {
         id: "demo-farm-" + Date.now(),
-        farmer_name: form.farmer_name || "Farmer",
-        state: form.state,
-        district: form.district,
-        crop: form.crop,
-        crop_stage: form.crop_stage,
-        soil_type: form.soil_type,
-        water_availability: form.water_availability,
-        nitrogen: form.nitrogen ?? null,
-        phosphorus: form.phosphorus ?? null,
-        potassium: form.potassium ?? null,
-        ph: form.ph ?? null,
+        farmer_name: submitForm.farmer_name || "Farmer",
+        state: submitForm.state,
+        district: submitForm.district,
+        crop: submitForm.crop,
+        crop_stage: submitForm.crop_stage,
+        soil_type: submitForm.soil_type,
+        water_availability: submitForm.water_availability,
+        nitrogen: submitForm.nitrogen ?? null,
+        phosphorus: submitForm.phosphorus ?? null,
+        potassium: submitForm.potassium ?? null,
+        ph: submitForm.ph ?? null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -140,15 +190,14 @@ export default function NewFarmPage() {
     }
   }
 
-  // ── Render ─────────────────────────────────
   return (
-    <div className="min-h-screen bg-kisan-bg">
-      {/* Top Bar */}
-      <header className="bg-white border-b border-kisan-border">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center">
+    <div className="min-h-screen bg-emerald-50/20">
+      {/* Header with LanguageSelector */}
+      <header className="bg-emerald-950 border-b border-emerald-900 text-white sticky top-0 z-50 shadow-md">
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 text-kisan-text-light hover:text-kisan-text transition-colors"
+            className="flex items-center gap-2 text-emerald-200 hover:text-white transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -163,15 +212,17 @@ export default function NewFarmPage() {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            <span className="text-sm font-medium">Back</span>
+            <span className="text-sm font-medium">{t.backLabel}</span>
           </Link>
+
+          <LanguageSelector />
         </div>
       </header>
 
       <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10">
         <PageHeader
-          title="Set Up Your Farm"
-          subtitle="Tell us about your farm so we can provide relevant recommendations. Only a few fields are required."
+          title={t.setupTitle}
+          subtitle={t.setupSubtitle}
         />
 
         <form onSubmit={handleSubmit} noValidate>
@@ -188,14 +239,14 @@ export default function NewFarmPage() {
 
           {/* ── Basic Information ──────────── */}
           <Card className="mb-6">
-            <h2 className="text-lg font-bold text-kisan-charcoal mb-5 flex items-center gap-2">
-              <span aria-hidden="true">👤</span> Basic Information
+            <h2 className="text-lg font-bold text-emerald-950 mb-5 flex items-center gap-2">
+              <span aria-hidden="true">👤</span> {t.basicInfoTitle}
             </h2>
 
             <div className="space-y-4">
               <Input
-                label="Farmer Name"
-                placeholder="Enter your name (optional)"
+                label={t.farmerNameLabel}
+                placeholder={t.farmerNamePlaceholder}
                 value={form.farmer_name || ""}
                 onChange={(e) => updateField("farmer_name", e.target.value)}
                 maxLength={100}
@@ -205,15 +256,15 @@ export default function NewFarmPage() {
 
           {/* ── Location ──────────────────── */}
           <Card className="mb-6">
-            <h2 className="text-lg font-bold text-kisan-charcoal mb-5 flex items-center gap-2">
-              <span aria-hidden="true">📍</span> Location
+            <h2 className="text-lg font-bold text-emerald-950 mb-5 flex items-center gap-2">
+              <span aria-hidden="true">📍</span> {t.locationTitle}
             </h2>
 
             <div className="space-y-4">
               <Select
-                label="State"
+                label={t.stateLabel}
                 required
-                placeholder="Select your state"
+                placeholder={t.selectStatePlaceholder}
                 options={stateOptions}
                 value={form.state}
                 onChange={(e) => updateField("state", e.target.value)}
@@ -221,12 +272,12 @@ export default function NewFarmPage() {
               />
 
               <Select
-                label="District"
+                label={t.districtLabel}
                 required
                 placeholder={
                   form.state
-                    ? "Select your district"
-                    : "First select your state"
+                    ? t.selectDistrictPlaceholder
+                    : t.firstSelectState
                 }
                 options={districts}
                 value={form.district}
@@ -239,62 +290,75 @@ export default function NewFarmPage() {
 
           {/* ── Crop Details ──────────────── */}
           <Card className="mb-6">
-            <h2 className="text-lg font-bold text-kisan-charcoal mb-5 flex items-center gap-2">
-              <span aria-hidden="true">🌾</span> Crop Details
+            <h2 className="text-lg font-bold text-emerald-950 mb-5 flex items-center gap-2">
+              <span aria-hidden="true">🌾</span> {t.cropDetailsTitle}
             </h2>
 
             <div className="space-y-4">
               <Select
-                label="Crop"
+                label={t.cropLabel}
                 required
-                placeholder="Select your crop"
-                options={[...COMMON_CROPS]}
-                value={form.crop}
-                onChange={(e) => updateField("crop", e.target.value)}
+                placeholder={t.selectCropPlaceholder}
+                options={cropSelectOptions}
+                value={selectedCropOption}
+                onChange={(e) => {
+                  setSelectedCropOption(e.target.value);
+                  updateField("crop", e.target.value);
+                }}
                 error={errors.crop}
               />
 
+              {isCustomCrop && (
+                <Input
+                  label={t.manualCropLabel}
+                  placeholder={t.manualCropPlaceholder}
+                  value={customCropName}
+                  onChange={(e) => setCustomCropName(e.target.value)}
+                  required
+                />
+              )}
+
               <Select
-                label="Crop Stage"
+                label={t.cropStageLabel}
                 required
-                placeholder="Select current stage"
-                options={[...CROP_STAGES]}
+                placeholder={t.selectStagePlaceholder}
+                options={stageOptions}
                 value={form.crop_stage}
                 onChange={(e) => updateField("crop_stage", e.target.value)}
                 error={errors.crop_stage}
-                hint="What stage is your crop currently in?"
+                hint={t.cropStageHint}
               />
             </div>
           </Card>
 
           {/* ── Soil & Water ──────────────── */}
           <Card className="mb-6">
-            <h2 className="text-lg font-bold text-kisan-charcoal mb-5 flex items-center gap-2">
-              <span aria-hidden="true">🏔️</span> Soil & Water
+            <h2 className="text-lg font-bold text-emerald-950 mb-5 flex items-center gap-2">
+              <span aria-hidden="true">🏔️</span> {t.soilWaterTitle}
             </h2>
 
             <div className="space-y-4">
               <Select
-                label="Soil Type"
+                label={t.soilTypeLabel}
                 required
-                placeholder="Select soil type"
-                options={[...SOIL_TYPES]}
+                placeholder={t.selectSoilPlaceholder}
+                options={soilOptions}
                 value={form.soil_type}
                 onChange={(e) => updateField("soil_type", e.target.value)}
                 error={errors.soil_type}
               />
 
               <Select
-                label="Water Availability"
+                label={t.waterAvailabilityLabel}
                 required
-                placeholder="Select water availability"
-                options={[...WATER_AVAILABILITY]}
+                placeholder={t.selectWaterPlaceholder}
+                options={waterOptions}
                 value={form.water_availability}
                 onChange={(e) =>
                   updateField("water_availability", e.target.value)
                 }
                 error={errors.water_availability}
-                hint="How much irrigation water is available?"
+                hint={t.waterHint}
               />
             </div>
           </Card>
@@ -307,14 +371,14 @@ export default function NewFarmPage() {
               onClick={() => setShowOptional(!showOptional)}
               aria-expanded={showOptional}
             >
-              <h2 className="text-lg font-bold text-kisan-charcoal flex items-center gap-2">
-                <span aria-hidden="true">🧪</span> Soil Test Values
-                <span className="text-xs font-normal text-kisan-text-light bg-kisan-earth-100 px-2 py-0.5 rounded-full">
-                  Optional
+              <h2 className="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                <span aria-hidden="true">🧪</span> {t.soilTestTitle}
+                <span className="text-xs font-normal text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                  {t.optionalBadge}
                 </span>
               </h2>
               <svg
-                className={`w-5 h-5 text-kisan-text-light transition-transform ${
+                className={`w-5 h-5 text-emerald-600 transition-transform ${
                   showOptional ? "rotate-180" : ""
                 }`}
                 fill="none"
@@ -332,14 +396,13 @@ export default function NewFarmPage() {
 
             {showOptional && (
               <div className="mt-5 space-y-4">
-                <p className="text-xs text-kisan-text-light">
-                  If you have recent soil test results, entering them will
-                  improve crop recommendations.
+                <p className="text-xs text-emerald-700">
+                  {t.soilTestHint}
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <Input
-                    label="Nitrogen (N)"
+                    label={t.nitrogenLabel}
                     type="number"
                     placeholder="kg/ha"
                     min={0}
@@ -353,7 +416,7 @@ export default function NewFarmPage() {
                     }
                   />
                   <Input
-                    label="Phosphorus (P)"
+                    label={t.phosphorusLabel}
                     type="number"
                     placeholder="kg/ha"
                     min={0}
@@ -367,7 +430,7 @@ export default function NewFarmPage() {
                     }
                   />
                   <Input
-                    label="Potassium (K)"
+                    label={t.potassiumLabel}
                     type="number"
                     placeholder="kg/ha"
                     min={0}
@@ -381,7 +444,7 @@ export default function NewFarmPage() {
                     }
                   />
                   <Input
-                    label="pH"
+                    label={t.phLabel}
                     type="number"
                     placeholder="0–14"
                     min={0}
@@ -409,11 +472,11 @@ export default function NewFarmPage() {
             loading={submitting}
             id="btn-create-farm"
           >
-            {submitting ? "Saving farm profile..." : "Create Farm Profile"}
+            {submitting ? t.submittingFarm : t.submitFarmButton}
           </Button>
 
-          <p className="text-center text-xs text-kisan-text-light mt-4">
-            You can update your farm profile later.
+          <p className="text-center text-xs text-emerald-700 mt-4">
+            {t.updateLaterHint}
           </p>
         </form>
       </div>
