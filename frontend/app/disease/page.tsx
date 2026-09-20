@@ -22,11 +22,28 @@ export default function DiseaseDoctorPage() {
   const [error, setError] = useState<string | null>(null);
   const [nonPlantWarning, setNonPlantWarning] = useState<boolean>(false);
   const [result, setResult] = useState<DiseaseAnalysisResult | null>(null);
+  const [activeCrop, setActiveCrop] = useState<string>("cotton");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("kisaniq_farm");
+      if (stored) {
+        try {
+          const farm = JSON.parse(stored);
+          if (farm.crop) {
+            setActiveCrop(farm.crop.toLowerCase());
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }, []);
 
   const startWebcam = async () => {
     try {
@@ -82,7 +99,7 @@ export default function DiseaseDoctorPage() {
       const nonPlantKeywords = [
         "jewelry", "gold", "necklace", "sreekanth", "modi", "face", "portrait",
         "selfie", "person", "human", "man", "woman", "car", "dog", "cat",
-        "building", "receipt", "document", "screenshot", "card", "avatar", "profile", "img_"
+        "building", "receipt", "document", "screenshot", "card", "avatar", "profile"
       ];
       
       // Filename check
@@ -91,7 +108,7 @@ export default function DiseaseDoctorPage() {
         return;
       }
 
-      // Canvas RGB Pixel Greenness Check
+      // Canvas 2-Tier RGB Pixel Skin & Vegetation Classifier
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.src = url;
@@ -110,6 +127,7 @@ export default function DiseaseDoctorPage() {
         const data = imgData.data;
 
         let greenCount = 0;
+        let skinCount = 0;
         let totalCount = 0;
 
         for (let i = 0; i < data.length; i += 4) {
@@ -122,13 +140,25 @@ export default function DiseaseDoctorPage() {
           if (r < 15 && g < 15 && b < 15) continue;
 
           totalCount++;
-          if (g > r * 0.92 && g > b * 1.05 && g > 40) {
+
+          // Tier 1: Standard RGB Skin Tone Detection
+          const isSkin = (r > 95 && g > 40 && b > 20 && (Math.max(r, g, b) - Math.min(r, g, b) > 15) && Math.abs(r - g) > 15 && r > g && r > b);
+          if (isSkin) {
+            skinCount++;
+          }
+
+          // Tier 2: Excess Green / Agricultural Foliage Detection
+          const exg = 2 * g - r - b;
+          if ((g > r * 0.88 && g > b * 1.02 && g > 30) || exg > 8) {
             greenCount++;
           }
         }
 
+        const skinRatio = totalCount > 0 ? skinCount / totalCount : 0;
         const greenRatio = totalCount > 0 ? greenCount / totalCount : 0;
-        if (greenRatio < 0.12) {
+
+        // If skin tone pixels > 8% OR green foliage ratio < 10%
+        if (skinRatio > 0.08 || greenRatio < 0.10) {
           resolve({ isLeaf: false, confidenceScore: 0 });
         } else {
           // Dynamic varied confidence scores (89% - 97%)
@@ -193,7 +223,7 @@ export default function DiseaseDoctorPage() {
         return;
       }
 
-      const data = await analyzeDisease(selectedFile);
+      const data = await analyzeDisease(selectedFile, activeCrop);
       
       // Override static 92% with dynamic confidence score!
       if (data && data.predictions && data.predictions.length > 0) {

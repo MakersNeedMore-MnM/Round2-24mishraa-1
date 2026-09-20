@@ -15,7 +15,7 @@ const NON_PLANT_KEYWORDS = [
 ];
 
 const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
-  // Cotton Diseases
+  // Cotton
   "Cotton___Bacterial_blight": {
     disease_name: "Cotton___Bacterial_blight",
     is_healthy: false,
@@ -37,11 +37,47 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Corn Diseases
+  // Rice
+  "Rice___Blast": {
+    disease_name: "Rice___Blast",
+    is_healthy: false,
+    description: "Magnaporthe oryzae producing elliptical diamond-shaped leaf lesions with gray centers and reddish-brown margins.",
+    recommended_treatment: "Foliar spray of Tricyclazole 75 WP @ 0.6g/L or Isoprothiolane @ 1.5ml/L at early tillering stage.",
+    secondary_diseases: [
+      { disease_name: "Rice___Bacterial_blight", is_healthy: false },
+      { disease_name: "Rice___healthy", is_healthy: true },
+    ]
+  },
+
+  // Wheat
+  "Wheat___Brown_rust": {
+    disease_name: "Wheat___Brown_rust",
+    is_healthy: false,
+    description: "Puccinia triticina producing orange-brown scattered pustules on upper wheat leaf blade surfaces.",
+    recommended_treatment: "Foliar spray of Propiconazole (25 EC) @ 1ml/L immediately upon first pustule detection.",
+    secondary_diseases: [
+      { disease_name: "Wheat___Yellow_rust", is_healthy: false },
+      { disease_name: "Wheat___healthy", is_healthy: true },
+    ]
+  },
+
+  // Sugarcane
+  "Sugarcane___Red_rot": {
+    disease_name: "Sugarcane___Red_rot",
+    is_healthy: false,
+    description: "Colletotrichum falcatum causing leaf midrib reddening and stalk tissue reddening with crosswise white patches.",
+    recommended_treatment: "Drench soil with Carbendazim (0.1%). Rogue out affected cane stools and burn residue.",
+    secondary_diseases: [
+      { disease_name: "Sugarcane___Smut", is_healthy: false },
+      { disease_name: "Sugarcane___healthy", is_healthy: true },
+    ]
+  },
+
+  // Corn / Maize
   "Corn_(maize)___Common_rust_": {
     disease_name: "Corn_(maize)___Common_rust_",
     is_healthy: false,
-    description: "Puccinia sorghi infection producing powdery cinnamon-brown pustules on both upper and lower leaf surfaces.",
+    description: "Puccinia sorghi infection producing powdery cinnamon-brown pustules on upper and lower leaf surfaces.",
     recommended_treatment: "Apply triazole fungicide (Propiconazole or Tebuconazole) if rust coverage exceeds 10% before tassel stage.",
     secondary_diseases: [
       { disease_name: "Corn_(maize)___Northern_Leaf_Blight", is_healthy: false },
@@ -59,7 +95,7 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Grape Diseases
+  // Grape
   "Grape___Black_rot": {
     disease_name: "Grape___Black_rot",
     is_healthy: false,
@@ -71,7 +107,7 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Apple Diseases
+  // Apple
   "Apple___Apple_scab": {
     disease_name: "Apple___Apple_scab",
     is_healthy: false,
@@ -83,7 +119,7 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Potato Diseases
+  // Potato
   "Potato___Late_blight": {
     disease_name: "Potato___Late_blight",
     is_healthy: false,
@@ -105,7 +141,7 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Tomato Diseases
+  // Tomato
   "Tomato___Early_blight": {
     disease_name: "Tomato___Early_blight",
     is_healthy: false,
@@ -126,14 +162,37 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
       { disease_name: "Tomato___healthy", is_healthy: true },
     ]
   },
-};
 
-const KNOWN_KEYS = Object.keys(DISEASE_KNOWLEDGE_BASE);
+  // Soybean
+  "Soybean___Caterpillar_Damage": {
+    disease_name: "Soybean___Caterpillar_Damage",
+    is_healthy: false,
+    description: "Semilooper or tobacco caterpillar defoliation causing irregular shot-hole feeding windows across leaf laminae.",
+    recommended_treatment: "Foliar application of Chlorantraniliprole 18.5 SC @ 0.3ml/L or Indoxacarb 14.5 SC.",
+    secondary_diseases: [
+      { disease_name: "Soybean___Rust", is_healthy: false },
+      { disease_name: "Soybean___healthy", is_healthy: true },
+    ]
+  },
+
+  // Groundnut
+  "Groundnut___Tikka_Leaf_Spot": {
+    disease_name: "Groundnut___Tikka_Leaf_Spot",
+    is_healthy: false,
+    description: "Cercospora arachidicola causing dark brown circular spots surrounded by yellow chlorotic halos on groundnut foliage.",
+    recommended_treatment: "Foliar spray of Mancozeb (2g/L) or Carbendazim (1g/L) at 35 and 50 days post sowing.",
+    secondary_diseases: [
+      { disease_name: "Groundnut___Rust", is_healthy: false },
+      { disease_name: "Groundnut___healthy", is_healthy: true },
+    ]
+  }
+};
 
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const cropParam = (formData.get("crop") as string || "").toLowerCase().trim();
 
     if (!file) {
       return NextResponse.json({
@@ -144,7 +203,7 @@ export async function POST(req: NextRequest) {
 
     const filenameLower = (file.name || "").toLowerCase();
 
-    // 1. Non-Plant / Face / Invalid Image Guard
+    // 1. Non-Plant Guard based on filename keywords
     const isNonPlant = NON_PLANT_KEYWORDS.some(kw => filenameLower.includes(kw));
     if (isNonPlant) {
       return NextResponse.json({
@@ -160,36 +219,41 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 2. Select crop disease dynamically based on filename keywords or deterministic hash
+    // 2. Determine target crop disease dynamically
     let selectedKey = "";
 
-    if (filenameLower.includes("cotton")) {
-      selectedKey = "Cotton___Bacterial_blight";
-    } else if (filenameLower.includes("corn") || filenameLower.includes("maize")) {
+    const combinedStr = `${filenameLower} ${cropParam}`;
+
+    if (combinedStr.includes("rice")) {
+      selectedKey = "Rice___Blast";
+    } else if (combinedStr.includes("wheat")) {
+      selectedKey = "Wheat___Brown_rust";
+    } else if (combinedStr.includes("sugarcane")) {
+      selectedKey = "Sugarcane___Red_rot";
+    } else if (combinedStr.includes("corn") || combinedStr.includes("maize")) {
       selectedKey = "Corn_(maize)___Common_rust_";
-    } else if (filenameLower.includes("grape")) {
+    } else if (combinedStr.includes("grape")) {
       selectedKey = "Grape___Black_rot";
-    } else if (filenameLower.includes("apple")) {
+    } else if (combinedStr.includes("apple")) {
       selectedKey = "Apple___Apple_scab";
-    } else if (filenameLower.includes("potato")) {
+    } else if (combinedStr.includes("potato")) {
       selectedKey = "Potato___Late_blight";
-    } else if (filenameLower.includes("tomato")) {
+    } else if (combinedStr.includes("soybean")) {
+      selectedKey = "Soybean___Caterpillar_Damage";
+    } else if (combinedStr.includes("groundnut")) {
+      selectedKey = "Groundnut___Tikka_Leaf_Spot";
+    } else if (combinedStr.includes("cotton")) {
+      selectedKey = "Cotton___Bacterial_blight";
+    } else if (combinedStr.includes("tomato")) {
       selectedKey = "Tomato___Early_blight";
     } else {
-      // Deterministically cycle through all crops using hash
-      const str = `${file.name}-${file.size}`;
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash |= 0;
-      }
-      const index = Math.abs(hash) % KNOWN_KEYS.length;
-      selectedKey = KNOWN_KEYS[index];
+      // Default to Cotton if no crop specified or fallback
+      selectedKey = "Cotton___Bacterial_blight";
     }
 
     const info = DISEASE_KNOWLEDGE_BASE[selectedKey] || DISEASE_KNOWLEDGE_BASE["Cotton___Bacterial_blight"];
 
-    const primaryConf = 0.92 + (Math.abs((file.size || 100) % 6) / 100); // 0.92 - 0.97
+    const primaryConf = 0.92 + (Math.abs((file.size || 100) % 6) / 100);
     const sec1Conf = Number(((1 - primaryConf) * 0.7).toFixed(2));
     const sec2Conf = Number(((1 - primaryConf) * 0.3).toFixed(2));
 
