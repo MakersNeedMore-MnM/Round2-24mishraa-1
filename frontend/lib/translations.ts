@@ -204,7 +204,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     cap6Desc: "Track your crop's recovery by comparing images over time. See whether conditions are improving, stable, or worsening.",
     readyToStart: "Ready to make better decisions for your farm?",
     finalCtaSubtitle: "Start with your farm profile. Get crop recommendations, weather alerts, and AI-powered disease analysis.",
-    footerText: "Built by Team 4Bits for Morrow 1.0",
+    footerText: "Built by Team 24mishraa-1 for Morrow 1.0",
 
     backLabel: "Back",
     setupTitle: "Set Up Your Farm",
@@ -394,7 +394,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     cap6Desc: "समय के साथ चित्रों की तुलना करके अपनी फसल के सुधार को ट्रैक करें।",
     readyToStart: "क्या आप अपने खेत के लिए बेहतर निर्णय लेने के लिए तैयार हैं?",
     finalCtaSubtitle: "अपने खेत की प्रोफाइल से शुरुआत करें। फसल सिफारिशें, मौसम अलर्ट और AI बीमारी विश्लेषण प्राप्त करें।",
-    footerText: "टीम 4Bits द्वारा निर्मित — Morrow 1.0",
+    footerText: "टीम 24mishraa-1 द्वारा निर्मित — Morrow 1.0",
 
     backLabel: "वापस जाएं",
     setupTitle: "अपने खेत की जानकारी दर्ज करें",
@@ -585,7 +585,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     cap6Desc: "वेळेनुसार फोटोंची तुलना करून तुमच्या पिकाच्या सुधारणेचा पाठपुरावा करा.",
     readyToStart: "तुमच्या शेतासाठी योग्य निर्णय घेण्यास तयार आहात का?",
     finalCtaSubtitle: "तुमच्या शेताच्या प्रोफाईलपासून सुरुवात करा. पिक शिफारसी, हवामान इशारे आणि AI रोग विश्लेषण मिळवा.",
-    footerText: "टीम 4Bits द्वारे निर्मित — Morrow 1.0",
+    footerText: "टीम 24mishraa-1 द्वारे निर्मित — Morrow 1.0",
 
     backLabel: "मागे जा",
     setupTitle: "तुमच्या शेताची माहिती प्रविष्ट करा",
@@ -776,7 +776,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     cap6Desc: "సమయంతో పాటు చిత్రాలను పోల్చడం ద్వారా మీ పంట కోలుకోవడాన్ని ట్రాక్ చేయండి.",
     readyToStart: "మీ పొలం కోసం ఉత్తమ నిర్ణయాలు తీసుకోవడానికి సిద్ధంగా ఉన్నారా?",
     finalCtaSubtitle: "మీ ఫారమ్ ప్రొఫైల్‌తో ప్రారంభించండి. పంట సిఫార్సులు, వాతావరణ హెచ్చరికలు మరియు AI వ్యాధి విశ్లేషణ పొందండి.",
-    footerText: "టీమ్ 4Bits ద్వారా నిర్మించబడింది — Morrow 1.0",
+    footerText: "టీమ్ 24mishraa-1 ద్వారా నిర్మించబడింది — Morrow 1.0",
 
     backLabel: "వెనుకకు",
     setupTitle: "మీ పొలం వివరాలను నమోదు చేయండి",
@@ -967,7 +967,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     cap6Desc: "காலப்போக்கில் படங்களை ஒப்பிடுவதன் மூலம் உங்கள் பயிரின் மீட்சியைக் கண்காணிக்கவும்.",
     readyToStart: "உங்கள் பண்ணைக்கு சிறந்த முடிவுகளை எடுக்கத் தயாரா?",
     finalCtaSubtitle: "உங்கள் பண்ணை சுயவிவரத்துடன் தொடங்கவும். பயிர் பரிந்துரைகள், வானிலை எச்சரிக்கைகள் பெறவும்.",
-    footerText: "குழு 4Bits உருவாக்கியது — Morrow 1.0",
+    footerText: "குழு 24mishraa-1 உருவாக்கியது — Morrow 1.0",
 
     backLabel: "பின்னால்",
     setupTitle: "உங்கள் பண்ணையை அமைக்கவும்",

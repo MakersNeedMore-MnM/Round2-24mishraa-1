@@ -1,7 +1,7 @@
 # KISANIQ — Implementation Plan
 
 **AI-Powered Farmer Decision Support System**
-**Hackathon: Morrow 1.0 | Team: 4Bits**
+**Hackathon: Morrow 1.0 | Team: 24mishraa-1**
 
 ---
 

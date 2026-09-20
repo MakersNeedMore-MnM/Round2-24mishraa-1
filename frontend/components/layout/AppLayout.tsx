@@ -78,7 +78,7 @@ function DesktopNav({ pathname }: { pathname: string }) {
       </nav>
       <div className="p-4 border-t border-emerald-100">
         <p className="text-[10px] text-emerald-600 text-center font-medium">
-          KISANIQ v0.1 — Team 4Bits
+          KISANIQ v0.1 — Team 24mishraa-1
         </p>
       </div>
     </aside>
