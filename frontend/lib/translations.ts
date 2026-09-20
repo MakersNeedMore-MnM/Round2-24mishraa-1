@@ -11,6 +11,16 @@ export interface Translations {
   navFollowUp: string;
   selectLanguage: string;
 
+  // Landing Page
+  startAnalysis: string;
+  howItWorks: string;
+  heroSubtitle1: string;
+  heroSubtitle2: string;
+  heroDescription: string;
+  problemTitle: string;
+  capabilitiesTitle: string;
+  readyToStart: string;
+
   // Dashboard
   greeting: string;
   farmOverviewSub: string;
@@ -106,6 +116,15 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "Action Plan",
     navFollowUp: "Follow-up",
     selectLanguage: "Language / भाषा",
+
+    startAnalysis: "Start Farm Analysis",
+    howItWorks: "How It Works",
+    heroSubtitle1: "Don't just detect the problem.",
+    heroSubtitle2: "Decide what to do next.",
+    heroDescription: "Combining farm context, weather intelligence, and AI crop analysis to help farmers make informed decisions — from planting to follow-up.",
+    problemTitle: "The Problem",
+    capabilitiesTitle: "Core Capabilities",
+    readyToStart: "Ready to make better decisions for your farm?",
 
     greeting: "Good day, Farmer",
     farmOverviewSub: "Here's your farm overview and tools.",
@@ -214,6 +233,15 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navFollowUp: "निगरानी (Follow-up)",
     selectLanguage: "भाषा चुनें (Language)",
 
+    startAnalysis: "शुरू करें 🚀",
+    howItWorks: "यह कैसे काम करता है",
+    heroSubtitle1: "केवल बीमारी न पहचानें।",
+    heroSubtitle2: "आगे क्या करना है, यह तय करें।",
+    heroDescription: "खेत की जानकारी, मौसम पूर्वानुमान और AI फसल विश्लेषण को जोड़कर किसानों को सही निर्णय लेने में मदद करता है।",
+    problemTitle: "मुख्य समस्या",
+    capabilitiesTitle: "मुख्य विशेषताएं",
+    readyToStart: "क्या आप अपने खेत के लिए बेहतर निर्णय लेने के लिए तैयार हैं?",
+
     greeting: "नमस्ते, किसान भाई",
     farmOverviewSub: "यहाँ आपके खेत का विवरण और उपकरण दिए गए हैं।",
     farmLocation: "खेत का स्थान",
@@ -320,6 +348,15 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "कृती योजना (Action Plan)",
     navFollowUp: "पाठपुरावा (Follow-up)",
     selectLanguage: "भाषा निवडा (Language)",
+
+    startAnalysis: "सुरू करा 🚀",
+    howItWorks: "हे कसे कार्य करते",
+    heroSubtitle1: "फक्त रोग शोधू नका.",
+    heroSubtitle2: "पुढे काय करायचे ते ठरवा.",
+    heroDescription: "शेताची माहिती, हवामान अंदाज आणि AI पिक विश्लेषण एकत्र करून शेतकऱ्यांना अचूक निर्णय घेण्यास मदत करते.",
+    problemTitle: "मुख्य समस्या",
+    capabilitiesTitle: "प्रमुख वैशिष्ट्ये",
+    readyToStart: "तुमच्या शेतासाठी योग्य निर्णय घेण्यास तयार आहात का?",
 
     greeting: "नमस्कार, शेतकरी बांधवांनो",
     farmOverviewSub: "येथे तुमच्या शेताची माहिती आणि साधने दिली आहेत.",
@@ -428,6 +465,15 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navFollowUp: "ఫాలో-అప్ (Follow-up)",
     selectLanguage: "భాష ఎంచుకోండి (Language)",
 
+    startAnalysis: "ప్రారంభించండి 🚀",
+    howItWorks: "ఇది ఎలా పనిచేస్తుంది",
+    heroSubtitle1: "సమస్యను గుర్తించడమే కాదు.",
+    heroSubtitle2: "తదుపరి ఏమి చేయాలో నిర్ణయించండి.",
+    heroDescription: "నేల, వాతావరణం మరియు AI విశ్లేషణను ఉపయోగించి రైతులకు సరైన నిర్ణయాలు తీసుకోవడంలో సహాయపడుతుంది.",
+    problemTitle: "ప్రధాన సమస్య",
+    capabilitiesTitle: "ముఖ్యమైన సేవలు",
+    readyToStart: "మీ పొలం కోసం ఉత్తమ నిర్ణయాలు తీసుకోవడానికి సిద్ధంగా ఉన్నారా?",
+
     greeting: "నమస్కారం, రైతు సోదరా",
     farmOverviewSub: "ఇక్కడ మీ పొలం వివరాలు మరియు సాధనాలు ఉన్నాయి.",
     farmLocation: "పొలం ప్రదేశం",
@@ -534,6 +580,15 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "செயல் திட்டம் (Action Plan)",
     navFollowUp: "பின்தொடர்தல் (Follow-up)",
     selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
+
+    startAnalysis: "தொடங்கவும் 🚀",
+    howItWorks: "இது எவ்வாறு இயங்குகிறது",
+    heroSubtitle1: "பிரச்சனையை மட்டும் கண்டறிய வேண்டாம்.",
+    heroSubtitle2: "அடுத்து என்ன செய்வது என்று నిర్ణயியுங்கள்.",
+    heroDescription: "மண், வானிலை மற்றும் AI ஆய்வை பயன்படுத்தி விவசாயிகள் சரியான முடிவுகளை எடுக்க உதவுகிறது.",
+    problemTitle: "முக்கிய பிரச்சனை",
+    capabilitiesTitle: "முக்கிய அம்சங்கள்",
+    readyToStart: "உங்கள் பண்ணைக்கு சிறந்த முடிவுகளை எடுக்கத் தயாரா?",
 
     greeting: "வணக்கம், விவசாய தோழரே",
     farmOverviewSub: "இங்கே உங்கள் பண்ணை கண்ணோட்டம் மற்றும் கருவிகள் உள்ளன.",
