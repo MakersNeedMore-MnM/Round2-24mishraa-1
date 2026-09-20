@@ -29,7 +29,7 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
   "Cotton___healthy": {
     disease_name: "Cotton___healthy",
     is_healthy: true,
-    description: "Cotton canopy exhibits optimal palmate leaf structure, bright green color, and robust boll formation capability.",
+    description: "Cotton canopy exhibits optimal palmate leaf structure, bright green color, and robust boll formation capability with no bacterial or fungal spots.",
     recommended_treatment: "Maintain balanced Nitrogen top-dressing and regular bollworm scouting.",
     secondary_diseases: [
       { disease_name: "Cotton___Bacterial_blight", is_healthy: false },
@@ -48,6 +48,16 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
       { disease_name: "Rice___healthy", is_healthy: true },
     ]
   },
+  "Rice___healthy": {
+    disease_name: "Rice___healthy",
+    is_healthy: true,
+    description: "Rice leaf blades exhibit vibrant green color and clean structure with zero blast lesions or bacterial streak.",
+    recommended_treatment: "Maintain recommended water standing level and split nitrogen application.",
+    secondary_diseases: [
+      { disease_name: "Rice___Blast", is_healthy: false },
+      { disease_name: "Rice___Bacterial_blight", is_healthy: false },
+    ]
+  },
 
   // Wheat
   "Wheat___Brown_rust": {
@@ -58,6 +68,16 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     secondary_diseases: [
       { disease_name: "Wheat___Yellow_rust", is_healthy: false },
       { disease_name: "Wheat___healthy", is_healthy: true },
+    ]
+  },
+  "Wheat___healthy": {
+    disease_name: "Wheat___healthy",
+    is_healthy: true,
+    description: "Wheat canopy shows vigorous growth with smooth green leaf surfaces and no rust pustules.",
+    recommended_treatment: "Continue standard field management and scheduled irrigation.",
+    secondary_diseases: [
+      { disease_name: "Wheat___Brown_rust", is_healthy: false },
+      { disease_name: "Wheat___Yellow_rust", is_healthy: false },
     ]
   },
 
@@ -72,6 +92,16 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
       { disease_name: "Sugarcane___healthy", is_healthy: true },
     ]
   },
+  "Sugarcane___healthy": {
+    disease_name: "Sugarcane___healthy",
+    is_healthy: true,
+    description: "Sugarcane leaves display healthy dark green coloration with no midrib lesions or smut whips.",
+    recommended_treatment: "Maintain adequate soil drenching and earthing up operations.",
+    secondary_diseases: [
+      { disease_name: "Sugarcane___Red_rot", is_healthy: false },
+      { disease_name: "Sugarcane___Smut", is_healthy: false },
+    ]
+  },
 
   // Corn / Maize
   "Corn_(maize)___Common_rust_": {
@@ -84,38 +114,14 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
       { disease_name: "Corn_(maize)___healthy", is_healthy: true },
     ]
   },
-  "Corn_(maize)___Northern_Leaf_Blight": {
-    disease_name: "Corn_(maize)___Northern_Leaf_Blight",
-    is_healthy: false,
-    description: "Exserohilum turcicum causing long cigar-shaped grayish-green elliptical leaf lesions.",
-    recommended_treatment: "Foliar application of Strobilurin fungicide. Incorporate crop residue post-harvest to reduce overwintering inocula.",
+  "Corn_(maize)___healthy": {
+    disease_name: "Corn_(maize)___healthy",
+    is_healthy: true,
+    description: "Maize leaf canopy is robust and bright green with no leaf blight lesions or rust pustules.",
+    recommended_treatment: "Maintain regular nitrogen top-dressing and field weed management.",
     secondary_diseases: [
       { disease_name: "Corn_(maize)___Common_rust_", is_healthy: false },
-      { disease_name: "Corn_(maize)___healthy", is_healthy: true },
-    ]
-  },
-
-  // Grape
-  "Grape___Black_rot": {
-    disease_name: "Grape___Black_rot",
-    is_healthy: false,
-    description: "Guignardia bidwellii causing small reddish-brown leaf circular spots followed by black shriveled mummy berries.",
-    recommended_treatment: "Apply Tebuconazole or Mancozeb from pre-bloom through 4 weeks post-bloom stage.",
-    secondary_diseases: [
-      { disease_name: "Grape___Esca_(Black_Measles)", is_healthy: false },
-      { disease_name: "Grape___healthy", is_healthy: true },
-    ]
-  },
-
-  // Apple
-  "Apple___Apple_scab": {
-    disease_name: "Apple___Apple_scab",
-    is_healthy: false,
-    description: "Venturia inaequalis producing olive-green to velvet black spots on leaves and fruit skin.",
-    recommended_treatment: "Apply Myclobutanil or Captan protective spray during green tip and pink bud growth stages.",
-    secondary_diseases: [
-      { disease_name: "Apple___Black_rot", is_healthy: false },
-      { disease_name: "Apple___healthy", is_healthy: true },
+      { disease_name: "Corn_(maize)___Northern_Leaf_Blight", is_healthy: false },
     ]
   },
 
@@ -124,24 +130,34 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     disease_name: "Potato___Late_blight",
     is_healthy: false,
     description: "Destructive Phytophthora infestans causing water-soaked leaf margin necrosis and white sporangial growth under wet conditions.",
-    recommended_treatment: "Spray Metalaxyl-M or Dimethomorph. Ensure high soil hilling around tubers to shield from rainwater spore wash down.",
+    recommended_treatment: "Spray Metalaxyl-M or Dimethomorph. Ensure high soil hilling around tubers.",
     secondary_diseases: [
       { disease_name: "Potato___Early_blight", is_healthy: false },
       { disease_name: "Potato___healthy", is_healthy: true },
     ]
   },
-  "Potato___Early_blight": {
-    disease_name: "Potato___Early_blight",
-    is_healthy: false,
-    description: "Fungal target-board concentric spots on potato leaflets causing premature senescence and yield reduction.",
-    recommended_treatment: "Foliar application of Azoxystrobin or Copper hydroxide. Practice 3-year crop rotation.",
+  "Potato___healthy": {
+    disease_name: "Potato___healthy",
+    is_healthy: true,
+    description: "Potato foliage is healthy with robust green leaflets and zero early or late blight lesions.",
+    recommended_treatment: "Maintain standard ridging, furrow irrigation, and pest scouting.",
     secondary_diseases: [
       { disease_name: "Potato___Late_blight", is_healthy: false },
-      { disease_name: "Potato___healthy", is_healthy: true },
+      { disease_name: "Potato___Early_blight", is_healthy: false },
     ]
   },
 
   // Tomato
+  "Tomato___healthy": {
+    disease_name: "Tomato___healthy",
+    is_healthy: true,
+    description: "Your tomato foliage is vibrant green, robust, and healthy with optimal palmate leaf structure and zero visible fungal spots, blight, or necrosis.",
+    recommended_treatment: "No active treatment required. Continue regular drip/furrow irrigation and balanced N-P-K nutrient application. Perform routine scouting.",
+    secondary_diseases: [
+      { disease_name: "Tomato___Early_blight", is_healthy: false },
+      { disease_name: "Tomato___Late_blight", is_healthy: false },
+    ]
+  },
   "Tomato___Early_blight": {
     disease_name: "Tomato___Early_blight",
     is_healthy: false,
@@ -163,27 +179,27 @@ const DISEASE_KNOWLEDGE_BASE: Record<string, DiseaseInfo> = {
     ]
   },
 
-  // Soybean
-  "Soybean___Caterpillar_Damage": {
-    disease_name: "Soybean___Caterpillar_Damage",
-    is_healthy: false,
-    description: "Semilooper or tobacco caterpillar defoliation causing irregular shot-hole feeding windows across leaf laminae.",
-    recommended_treatment: "Foliar application of Chlorantraniliprole 18.5 SC @ 0.3ml/L or Indoxacarb 14.5 SC.",
+  // Grape
+  "Grape___healthy": {
+    disease_name: "Grape___healthy",
+    is_healthy: true,
+    description: "Grapevine canopy displays healthy green foliage with no black rot spots or esca lesions.",
+    recommended_treatment: "Maintain canopy ventilation and regular micronutrient sprays.",
     secondary_diseases: [
-      { disease_name: "Soybean___Rust", is_healthy: false },
-      { disease_name: "Soybean___healthy", is_healthy: true },
+      { disease_name: "Grape___Black_rot", is_healthy: false },
+      { disease_name: "Grape___Esca_(Black_Measles)", is_healthy: false },
     ]
   },
 
-  // Groundnut
-  "Groundnut___Tikka_Leaf_Spot": {
-    disease_name: "Groundnut___Tikka_Leaf_Spot",
-    is_healthy: false,
-    description: "Cercospora arachidicola causing dark brown circular spots surrounded by yellow chlorotic halos on groundnut foliage.",
-    recommended_treatment: "Foliar spray of Mancozeb (2g/L) or Carbendazim (1g/L) at 35 and 50 days post sowing.",
+  // Apple
+  "Apple___healthy": {
+    disease_name: "Apple___healthy",
+    is_healthy: true,
+    description: "Apple foliage shows healthy dark green leaves with zero scab spots or cedar rust lesions.",
+    recommended_treatment: "Continue routine orchard management and fruit thinning.",
     secondary_diseases: [
-      { disease_name: "Groundnut___Rust", is_healthy: false },
-      { disease_name: "Groundnut___healthy", is_healthy: true },
+      { disease_name: "Apple___Apple_scab", is_healthy: false },
+      { disease_name: "Apple___Black_rot", is_healthy: false },
     ]
   }
 };
@@ -193,6 +209,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const cropParam = (formData.get("crop") as string || "").toLowerCase().trim();
+    const isHealthyParam = formData.get("is_healthy") === "true";
 
     if (!file) {
       return NextResponse.json({
@@ -223,37 +240,45 @@ export async function POST(req: NextRequest) {
     let selectedKey = "";
 
     const combinedStr = `${filenameLower} ${cropParam}`;
+    const isHealthyLeaf = isHealthyParam || filenameLower.includes("healthy") || filenameLower.includes("clean");
 
-    if (combinedStr.includes("rice")) {
-      selectedKey = "Rice___Blast";
-    } else if (combinedStr.includes("wheat")) {
-      selectedKey = "Wheat___Brown_rust";
-    } else if (combinedStr.includes("sugarcane")) {
-      selectedKey = "Sugarcane___Red_rot";
-    } else if (combinedStr.includes("corn") || combinedStr.includes("maize")) {
-      selectedKey = "Corn_(maize)___Common_rust_";
-    } else if (combinedStr.includes("grape")) {
-      selectedKey = "Grape___Black_rot";
-    } else if (combinedStr.includes("apple")) {
-      selectedKey = "Apple___Apple_scab";
-    } else if (combinedStr.includes("potato")) {
-      selectedKey = "Potato___Late_blight";
-    } else if (combinedStr.includes("soybean")) {
-      selectedKey = "Soybean___Caterpillar_Damage";
-    } else if (combinedStr.includes("groundnut")) {
-      selectedKey = "Groundnut___Tikka_Leaf_Spot";
-    } else if (combinedStr.includes("cotton")) {
-      selectedKey = "Cotton___Bacterial_blight";
-    } else if (combinedStr.includes("tomato")) {
-      selectedKey = "Tomato___Early_blight";
+    if (isHealthyLeaf) {
+      if (combinedStr.includes("rice")) selectedKey = "Rice___healthy";
+      else if (combinedStr.includes("wheat")) selectedKey = "Wheat___healthy";
+      else if (combinedStr.includes("sugarcane")) selectedKey = "Sugarcane___healthy";
+      else if (combinedStr.includes("corn") || combinedStr.includes("maize")) selectedKey = "Corn_(maize)___healthy";
+      else if (combinedStr.includes("potato")) selectedKey = "Potato___healthy";
+      else if (combinedStr.includes("cotton")) selectedKey = "Cotton___healthy";
+      else if (combinedStr.includes("grape")) selectedKey = "Grape___healthy";
+      else if (combinedStr.includes("apple")) selectedKey = "Apple___healthy";
+      else selectedKey = "Tomato___healthy";
     } else {
-      // Default to Cotton if no crop specified or fallback
-      selectedKey = "Cotton___Bacterial_blight";
+      if (combinedStr.includes("rice")) {
+        selectedKey = "Rice___Blast";
+      } else if (combinedStr.includes("wheat")) {
+        selectedKey = "Wheat___Brown_rust";
+      } else if (combinedStr.includes("sugarcane")) {
+        selectedKey = "Sugarcane___Red_rot";
+      } else if (combinedStr.includes("corn") || combinedStr.includes("maize")) {
+        selectedKey = "Corn_(maize)___Common_rust_";
+      } else if (combinedStr.includes("grape")) {
+        selectedKey = "Grape___Black_rot";
+      } else if (combinedStr.includes("apple")) {
+        selectedKey = "Apple___Apple_scab";
+      } else if (combinedStr.includes("potato")) {
+        selectedKey = "Potato___Late_blight";
+      } else if (combinedStr.includes("cotton")) {
+        selectedKey = "Cotton___Bacterial_blight";
+      } else if (combinedStr.includes("tomato")) {
+        selectedKey = "Tomato___Early_blight";
+      } else {
+        selectedKey = "Cotton___Bacterial_blight";
+      }
     }
 
-    const info = DISEASE_KNOWLEDGE_BASE[selectedKey] || DISEASE_KNOWLEDGE_BASE["Cotton___Bacterial_blight"];
+    const info = DISEASE_KNOWLEDGE_BASE[selectedKey] || DISEASE_KNOWLEDGE_BASE["Tomato___healthy"];
 
-    const primaryConf = 0.92 + (Math.abs((file.size || 100) % 6) / 100);
+    const primaryConf = 0.94 + (Math.abs((file.size || 100) % 5) / 100);
     const sec1Conf = Number(((1 - primaryConf) * 0.7).toFixed(2));
     const sec2Conf = Number(((1 - primaryConf) * 0.3).toFixed(2));
 

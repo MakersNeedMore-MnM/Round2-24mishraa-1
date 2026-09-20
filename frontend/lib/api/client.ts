@@ -139,12 +139,15 @@ export async function getCropRecommendation(params: {
 
 // ── Disease Detection API ────────────────────
 
-export async function analyzeDisease(file: File, crop?: string): Promise<DiseaseAnalysisResult> {
+export async function analyzeDisease(file: File, crop?: string, isHealthy?: boolean): Promise<DiseaseAnalysisResult> {
   try {
     const formData = new FormData();
     formData.append('file', file);
     if (crop) {
       formData.append('crop', crop);
+    }
+    if (typeof isHealthy === 'boolean') {
+      formData.append('is_healthy', isHealthy ? 'true' : 'false');
     }
     const response = await fetch(`${API_URL}/api/disease/analyze`, {
       method: 'POST',

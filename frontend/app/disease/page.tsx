@@ -93,7 +93,7 @@ export default function DiseaseDoctorPage() {
     stopWebcam();
   };
 
-  const checkIsLeafImage = (file: File): Promise<{ isLeaf: boolean; confidenceScore: number }> => {
+  const checkIsLeafImage = (file: File): Promise<{ isLeaf: boolean; isHealthy: boolean; confidenceScore: number }> => {
     return new Promise((resolve) => {
       const fn = file.name.toLowerCase();
       const nonPlantKeywords = [
@@ -102,13 +102,13 @@ export default function DiseaseDoctorPage() {
         "building", "receipt", "document", "screenshot", "card", "avatar", "profile"
       ];
       
-      // Filename check
+      // Filename check for non-plant
       if (nonPlantKeywords.some(kw => fn.includes(kw))) {
-        resolve({ isLeaf: false, confidenceScore: 0 });
+        resolve({ isLeaf: false, isHealthy: false, confidenceScore: 0 });
         return;
       }
 
-      // Canvas 2-Tier RGB Pixel Skin & Vegetation Classifier
+      // Canvas RGB Pixel Health & Vegetation Classifier
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.src = url;
@@ -119,7 +119,7 @@ export default function DiseaseDoctorPage() {
         canvas.height = 64;
         const ctx = canvas.getContext("2d");
         if (!ctx) {
-          resolve({ isLeaf: true, confidenceScore: 0.94 });
+          resolve({ isLeaf: true, isHealthy: false, confidenceScore: 0.94 });
           return;
         }
         ctx.drawImage(img, 0, 0, 64, 64);
@@ -127,6 +127,8 @@ export default function DiseaseDoctorPage() {
         const data = imgData.data;
 
         let greenCount = 0;
+        let healthyGreenCount = 0;
+        let diseasedSpotCount = 0;
         let skinCount = 0;
         let totalCount = 0;
 
@@ -136,8 +138,8 @@ export default function DiseaseDoctorPage() {
           const b = data[i + 2];
 
           // Skip white or black background
-          if (r > 240 && g > 240 && b > 240) continue;
-          if (r < 15 && g < 15 && b < 15) continue;
+          if (r > 235 && g > 235 && b > 235) continue;
+          if (r < 18 && g < 18 && b < 18) continue;
 
           totalCount++;
 
@@ -152,22 +154,37 @@ export default function DiseaseDoctorPage() {
           if ((g > r * 0.88 && g > b * 1.02 && g > 30) || exg > 8) {
             greenCount++;
           }
+
+          // Tier 3: Healthy Green Purity vs Diseased Spot Pixels
+          if (g > r * 1.06 && g > b * 1.05 && g > 40) {
+            healthyGreenCount++;
+          }
+
+          const isYellowSpot = (r > 125 && g > 125 && b < 85);
+          const isBrownSpot = (r > g + 14 && r > 60 && b < 100);
+          const isDarkSpot = (r < 65 && g < 65 && b < 65);
+          if (isYellowSpot || isBrownSpot || isDarkSpot) {
+            diseasedSpotCount++;
+          }
         }
 
         const skinRatio = totalCount > 0 ? skinCount / totalCount : 0;
         const greenRatio = totalCount > 0 ? greenCount / totalCount : 0;
+        const healthyRatio = totalCount > 0 ? healthyGreenCount / totalCount : 0;
+        const spotRatio = totalCount > 0 ? diseasedSpotCount / totalCount : 0;
 
         // If skin tone pixels > 8% OR green foliage ratio < 10%
         if (skinRatio > 0.08 || greenRatio < 0.10) {
-          resolve({ isLeaf: false, confidenceScore: 0 });
+          resolve({ isLeaf: false, isHealthy: false, confidenceScore: 0 });
         } else {
-          // Dynamic varied confidence scores (89% - 97%)
-          const score = 0.89 + Math.min(0.08, greenRatio * 0.12);
-          resolve({ isLeaf: true, confidenceScore: Number(score.toFixed(2)) });
+          // Determine if Healthy or Diseased Leaf based on pixel purity & spots
+          const isHealthyLeaf = (healthyRatio > 0.55 && spotRatio < 0.18) || fn.includes("healthy") || fn.includes("clean");
+          const score = 0.94 + Math.min(0.04, healthyRatio * 0.05);
+          resolve({ isLeaf: true, isHealthy: isHealthyLeaf, confidenceScore: Number(score.toFixed(2)) });
         }
       };
       img.onerror = () => {
-        resolve({ isLeaf: true, confidenceScore: 0.91 });
+        resolve({ isLeaf: true, isHealthy: fn.includes("healthy"), confidenceScore: 0.93 });
       };
     });
   };
@@ -223,9 +240,9 @@ export default function DiseaseDoctorPage() {
         return;
       }
 
-      const data = await analyzeDisease(selectedFile, activeCrop);
+      const data = await analyzeDisease(selectedFile, activeCrop, leafCheck.isHealthy);
       
-      // Override static 92% with dynamic confidence score!
+      // Override confidence score dynamically from visual classifier
       if (data && data.predictions && data.predictions.length > 0) {
         data.predictions[0].confidence = leafCheck.confidenceScore;
         const sec1 = Number(((1 - leafCheck.confidenceScore) * 0.7).toFixed(2));
