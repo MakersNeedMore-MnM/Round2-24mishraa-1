@@ -32,6 +32,7 @@ export default function FollowUpPage() {
   const [result, setResult] = useState<ComparisonResult | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -68,6 +69,7 @@ export default function FollowUpPage() {
     setResult(null);
     setError(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+    if (cameraInputRef.current) cameraInputRef.current.value = "";
   };
 
   return (
@@ -115,6 +117,17 @@ export default function FollowUpPage() {
                 </div>
               </div>
 
+              {/* Native Mobile Camera Input */}
+              <input
+                type="file"
+                ref={cameraInputRef}
+                onChange={handleFileSelect}
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+              />
+
+              {/* Gallery / File Picker Input */}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -124,16 +137,32 @@ export default function FollowUpPage() {
               />
 
               {!previewUrl ? (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-emerald-300 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors flex flex-col items-center justify-center min-h-[220px]"
-                >
+                <div className="border-2 border-dashed border-emerald-300 rounded-2xl p-6 text-center hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors flex flex-col items-center justify-center min-h-[200px]">
                   <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-2xl mb-3 text-emerald-700">
                     📷
                   </div>
-                  <p className="text-emerald-900 font-medium mb-1">
+                  <p className="text-emerald-900 font-bold mb-3">
                     {t.uploadFollowupTitle}
                   </p>
+
+                  {/* Dual Action Buttons for Camera & Gallery */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                    <button
+                      type="button"
+                      onClick={() => cameraInputRef.current?.click()}
+                      className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors"
+                    >
+                      {t.takePhoto}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 font-semibold py-2.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xs transition-colors"
+                    >
+                      {t.chooseGallery}
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="relative rounded-xl overflow-hidden border border-emerald-200 bg-black/5 flex justify-center items-center max-h-[260px]">

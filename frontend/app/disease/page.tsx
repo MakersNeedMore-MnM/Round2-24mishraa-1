@@ -24,6 +24,57 @@ export default function DiseaseDoctorPage() {
   const [result, setResult] = useState<DiseaseAnalysisResult | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isWebcamOpen, setIsWebcamOpen] = useState(false);
+
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+      setIsWebcamOpen(true);
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      }, 200);
+    } catch {
+      setError("Could not access camera. Please check permissions or use File/Gallery upload.");
+    }
+  };
+
+  const stopWebcam = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    setIsWebcamOpen(false);
+  };
+
+  const captureWebcamPhoto = () => {
+    if (!videoRef.current) return;
+    const canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.videoWidth || 640;
+    canvas.height = videoRef.current.videoHeight || 480;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "camera_leaf_capture.jpg", { type: "image/jpeg" });
+          setSelectedFile(file);
+          setPreviewUrl(URL.createObjectURL(file));
+          setError(null);
+          setNonPlantWarning(false);
+          setResult(null);
+        }
+      }, "image/jpeg", 0.95);
+    }
+    stopWebcam();
+  };
 
   const checkIsLeafImage = (file: File): Promise<{ isLeaf: boolean; confidenceScore: number }> => {
     return new Promise((resolve) => {
@@ -167,9 +218,8 @@ export default function DiseaseDoctorPage() {
     setResult(null);
     setError(null);
     setNonPlantWarning(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (cameraInputRef.current) cameraInputRef.current.value = "";
   };
 
   return (
@@ -195,6 +245,51 @@ export default function DiseaseDoctorPage() {
           </Alert>
         )}
 
+        {/* Live Webcam Modal */}
+        {isWebcamOpen && (
+          <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-lg w-full p-5 space-y-4 shadow-2xl">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                  <span>📷</span> Live Camera Feed
+                </h3>
+                <button
+                  onClick={stopWebcam}
+                  className="text-gray-500 hover:text-gray-800 font-bold text-lg"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="relative rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+                <video
+                  ref={videoRef}
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="primary"
+                  onClick={captureWebcamPhoto}
+                  className="flex-1 justify-center py-3"
+                >
+                  📸 Capture Leaf Photo
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={stopWebcam}
+                  className="py-3"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Upload Section */}
           <Card className="flex flex-col justify-between p-6">
@@ -206,6 +301,17 @@ export default function DiseaseDoctorPage() {
                 {t.uploadSubtitle}
               </p>
 
+              {/* Native Mobile Camera Input */}
+              <input
+                type="file"
+                ref={cameraInputRef}
+                onChange={handleFileSelect}
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+              />
+
+              {/* Gallery / File Picker Input */}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -218,18 +324,45 @@ export default function DiseaseDoctorPage() {
                 <div
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-emerald-300 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors flex flex-col items-center justify-center min-h-[260px]"
+                  className="border-2 border-dashed border-emerald-300 rounded-2xl p-6 text-center hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors flex flex-col items-center justify-center min-h-[240px]"
                 >
-                  <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-3xl mb-4 text-emerald-700">
+                  <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-3xl mb-3 text-emerald-700">
                     📸
                   </div>
-                  <p className="text-emerald-900 font-medium mb-1">
+                  <p className="text-emerald-950 font-bold text-base mb-1">
                     {t.uploadPlaceholder}
                   </p>
-                  <p className="text-xs text-emerald-600">
+                  <p className="text-xs text-emerald-600 mb-5">
                     Supports JPG, PNG, WEBP up to 10MB
                   </p>
+
+                  {/* Dual Action Buttons for Camera & Gallery */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                    <button
+                      type="button"
+                      onClick={() => cameraInputRef.current?.click()}
+                      className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors"
+                    >
+                      {t.takePhoto}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 font-semibold py-2.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xs transition-colors"
+                    >
+                      {t.chooseGallery}
+                    </button>
+                  </div>
+
+                  {/* Desktop Live Webcam Stream option */}
+                  <button
+                    type="button"
+                    onClick={startWebcam}
+                    className="mt-4 text-xs text-emerald-700 font-medium underline hover:text-emerald-900"
+                  >
+                    💻 Open Live Webcam Stream
+                  </button>
                 </div>
               ) : (
                 <div className="relative rounded-xl overflow-hidden border border-emerald-200 bg-black/5 flex justify-center items-center max-h-[300px]">

@@ -103,6 +103,8 @@ export interface Translations {
   uploadSubtitle: string;
   uploadPlaceholder: string;
   uploadButton: string;
+  takePhoto: string;
+  chooseGallery: string;
   analyzingText: string;
   primaryDiagnosis: string;
   diseaseSummary: string;
@@ -299,6 +301,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     uploadSubtitle: "Upload a clear close-up photo of the affected plant leaf.",
     uploadPlaceholder: "Click to upload or drag & drop leaf photo",
     uploadButton: "Analyze Image 🔍",
+    takePhoto: "📷 Take Photo (Camera)",
+    chooseGallery: "🖼️ Choose from Gallery",
     analyzingText: "Analyzing Leaf Image...",
     primaryDiagnosis: "Primary Diagnosis",
     diseaseSummary: "Disease Summary",
@@ -467,6 +471,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     uploadSubtitle: "प्रभावित फसल के पत्ते की साफ फोटो अपलोड करें।",
     uploadPlaceholder: "फोटो अपलोड करने के लिए क्लिक करें या खींचकर लाएं",
     uploadButton: "चित्र का विश्लेषण करें 🔍",
+    takePhoto: "📷 फोटो खींचें (कैमरा)",
+    chooseGallery: "🖼️ गैलरी से चुनें",
     analyzingText: "पत्ते का विश्लेषण हो रहा है...",
     primaryDiagnosis: "मुख्य बीमारी की पहचान",
     diseaseSummary: "बीमारी का विवरण",
@@ -656,6 +662,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     uploadSubtitle: "बाधित पिकाच्या पानाचा स्पष्ट फोटो अपलोड करा.",
     uploadPlaceholder: "फोटो अपलोड करण्यासाठी क्लिक करा",
     uploadButton: "निदान करा 🔍",
+    takePhoto: "📷 फोटो काढा (कॅमेरा)",
+    chooseGallery: "🖼️ गॅलरीमधून निवडा",
     analyzingText: "पानाचे विश्लेषण सुरू आहे...",
     primaryDiagnosis: "प्रमुख रोगाचे निदान",
     diseaseSummary: "रोगाची माहिती",
@@ -845,6 +853,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     uploadSubtitle: "బాధిత ఆకు స్పష్టమైన ఫోటోను అప్‌లోడ్ చేయండి.",
     uploadPlaceholder: "ఫోటో అప్‌లోడ్ చేయడానికి క్లిక్ చేయండి",
     uploadButton: "విశ్లేషించండి 🔍",
+    takePhoto: "📷 ఫోటో తీయండి (కెమెరా)",
+    chooseGallery: "🖼️ గ్యాలరీ నుండి ఎంచుకోండి",
     analyzingText: "ఆకు విశ్లేషించబడుతోంది...",
     primaryDiagnosis: "ప్రధాన తెగులు గుర్తింపు",
     diseaseSummary: "తెగులు వివరాలు",
@@ -1034,6 +1044,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     uploadSubtitle: "பாதிக்கப்பட்ட இலையின் தெளிவான புகைப்படத்தைப் பதிவேற்றவும்.",
     uploadPlaceholder: "புகைப்படத்தைப் பதிவேற்ற கிளிக் செய்யவும்",
     uploadButton: "ஆய்வு செய் 🔍",
+    takePhoto: "📷 படம் எடுக்கவும் (கேமரா)",
+    chooseGallery: "🖼️ கேலரியில் இருந்து தேர்வு செய்",
     analyzingText: "இலை ஆய்வு செய்யப்படுகிறது...",
     primaryDiagnosis: "முதன்மை நோய் கண்டறிதல்",
     diseaseSummary: "நோய் விவரம்",
