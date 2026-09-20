@@ -12,6 +12,7 @@ import {
 } from "@/components/ui";
 import { getActionPlan } from "@/lib/api/client";
 import type { Farm } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ActionTask {
   id: string;
@@ -23,6 +24,7 @@ interface ActionTask {
 }
 
 export default function ActionPlanPage() {
+  const { t } = useLanguage();
   const [farm] = useState<Farm | null>(() => {
     if (typeof window === "undefined") return null;
     const saved = localStorage.getItem("kisaniq_farm");
@@ -76,8 +78,8 @@ export default function ActionPlanPage() {
     <AppLayout>
       <div className="max-w-4xl mx-auto space-y-8">
         <PageHeader
-          title="Smart Action Plan 📋"
-          subtitle="Prioritized, step-by-step decision support tailored to your farm's stage and weather risks."
+          title={t.actionTitle}
+          subtitle={t.actionSubtitle}
         />
 
         {error && (
@@ -99,10 +101,10 @@ export default function ActionPlanPage() {
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <h3 className="text-lg font-bold text-emerald-950">
-                    Action Plan Progress
+                    {t.actionProgress}
                   </h3>
                   <p className="text-xs text-emerald-800">
-                    {completedCount} of {tasks.length} tasks completed
+                    {completedCount} of {tasks.length} {t.tasksCompleted}
                   </p>
                 </div>
                 <Badge color={progressPct === 100 ? "green" : "yellow"} className="text-sm px-3 py-1">
@@ -115,8 +117,8 @@ export default function ActionPlanPage() {
 
             {/* Task List */}
             <div className="space-y-4">
-              <h3 className="text-base font-bold text-kisan-charcoal flex items-center gap-2">
-                <span>⚡</span> Recommended Action Steps
+              <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
+                <span>⚡</span> {t.recommendedSteps}
               </h3>
 
               {tasks.map((task) => {
@@ -146,14 +148,14 @@ export default function ActionPlanPage() {
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <h4
                             className={`text-base font-bold ${
-                              isDone ? "line-through text-gray-500" : "text-kisan-charcoal"
+                              isDone ? "line-through text-gray-500" : "text-emerald-950"
                             }`}
                           >
                             {task.title}
                           </h4>
 
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-gray-100 text-gray-700">
+                            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
                               {task.category}
                             </span>
                             <Badge
@@ -170,12 +172,12 @@ export default function ActionPlanPage() {
                           </div>
                         </div>
 
-                        <p className={`text-sm leading-relaxed ${isDone ? "text-gray-400" : "text-kisan-text"}`}>
+                        <p className={`text-sm leading-relaxed ${isDone ? "text-gray-400" : "text-emerald-900"}`}>
                           {task.description}
                         </p>
 
                         <div className="pt-2 text-xs font-medium text-emerald-700 flex items-center gap-1">
-                          <span>⏱️ Timeline:</span> {task.timeline}
+                          <span>⏱️ {t.timelineLabel}</span> {task.timeline}
                         </div>
                       </div>
                     </div>

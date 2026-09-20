@@ -11,6 +11,7 @@ import {
   StatusBadge,
 } from "@/components/ui";
 import { compareFollowUp } from "@/lib/api/client";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ComparisonResult {
   previous_affected_pct: number;
@@ -22,6 +23,7 @@ interface ComparisonResult {
 }
 
 export default function FollowUpPage() {
+  const { t } = useLanguage();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previousPct, setPreviousPct] = useState<number>(35.0);
@@ -72,8 +74,8 @@ export default function FollowUpPage() {
     <AppLayout>
       <div className="max-w-5xl mx-auto space-y-8">
         <PageHeader
-          title="Follow-up Monitoring 🔄"
-          subtitle="Track crop recovery by comparing follow-up leaf photos against baseline disease scans."
+          title={t.followupTitle}
+          subtitle={t.followupSubtitle}
         />
 
         {error && (
@@ -87,10 +89,10 @@ export default function FollowUpPage() {
           <Card className="flex flex-col justify-between p-6">
             <div>
               <h2 className="text-xl font-semibold text-emerald-950 mb-2">
-                Follow-up Leaf Photo
+                {t.uploadFollowupTitle}
               </h2>
               <p className="text-sm text-emerald-700/80 mb-4">
-                Upload a new photo of the treated crop leaf to evaluate healing.
+                {t.uploadFollowupSub}
               </p>
 
               <div className="mb-6 bg-emerald-50 p-3.5 rounded-xl border border-emerald-100 flex items-center justify-between">
@@ -130,7 +132,7 @@ export default function FollowUpPage() {
                     📷
                   </div>
                   <p className="text-emerald-900 font-medium mb-1">
-                    Upload Follow-up Leaf Photo
+                    {t.uploadFollowupTitle}
                   </p>
                 </div>
               ) : (
@@ -158,7 +160,7 @@ export default function FollowUpPage() {
                 loading={loading}
                 className="flex-1 justify-center py-3 text-base"
               >
-                {loading ? "Analyzing Recovery..." : "Run Follow-Up Comparison 🔄"}
+                {loading ? "Analyzing Recovery..." : t.compareButton}
               </Button>
             </div>
           </Card>
@@ -184,18 +186,18 @@ export default function FollowUpPage() {
             )}
 
             {!loading && result && (
-              <Card className="p-6 space-y-6 border-t-4 border-t-kisan-green-600">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <Card className="p-6 space-y-6 border-t-4 border-t-emerald-600">
+                <div className="flex items-center justify-between border-b border-emerald-100 pb-4">
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
-                      Recovery Trajectory
+                      {t.recoveryStatus}
                     </span>
-                    <h3 className="text-2xl font-bold text-kisan-charcoal">
+                    <h3 className="text-2xl font-bold text-emerald-950">
                       {result.status === "IMPROVING"
-                        ? "Significant Recovery 🌿"
+                        ? `${t.improvingStatus} 🌿`
                         : result.status === "STABLE"
-                        ? "Infection Stabilized ⚖️"
-                        : "Infection Spread ⚠️"}
+                        ? `${t.stableStatus} ⚖️`
+                        : `${t.worseningStatus} ⚠️`}
                     </h3>
                   </div>
 
@@ -220,19 +222,19 @@ export default function FollowUpPage() {
 
                 <div className="space-y-3">
                   <div>
-                    <h4 className="text-sm font-semibold text-kisan-charcoal mb-1">
+                    <h4 className="text-sm font-semibold text-emerald-950 mb-1">
                       Assessment Summary
                     </h4>
-                    <p className="text-sm text-kisan-text bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+                    <p className="text-sm text-emerald-900 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                       {result.summary}
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="text-sm font-semibold text-kisan-charcoal mb-1 flex items-center gap-1">
+                    <h4 className="text-sm font-semibold text-emerald-950 mb-1 flex items-center gap-1">
                       <span>💡</span> Recommended Follow-Up Action
                     </h4>
-                    <p className="text-sm text-kisan-charcoal bg-emerald-100/60 p-3 rounded-xl border border-emerald-200 font-medium">
+                    <p className="text-sm text-emerald-950 bg-emerald-100/60 p-3 rounded-xl border border-emerald-200 font-medium">
                       {result.recommendation}
                     </p>
                   </div>

@@ -12,8 +12,10 @@ import {
 import { getWeather, APIError } from "@/lib/api/client";
 import type { Farm, WeatherData } from "@/types";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function WeatherPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [farm, setFarm] = useState<Farm | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -40,7 +42,6 @@ export default function WeatherPage() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFarm(parsed);
         fetchWeather(parsed.state, parsed.district);
       } catch {
@@ -69,7 +70,7 @@ export default function WeatherPage() {
           action={
             <button
               onClick={() => router.push("/farm/new")}
-              className="bg-kisan-green-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-kisan-green-800"
+              className="bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-emerald-800"
             >
               Create Farm Profile
             </button>
@@ -82,8 +83,8 @@ export default function WeatherPage() {
   return (
     <AppLayout>
       <PageHeader
-        title="Weather Intelligence"
-        subtitle={`Current conditions and risks for ${farm.district}, ${farm.state}`}
+        title={t.weatherTitle}
+        subtitle={`${t.weatherSubtitle} (${farm.district}, ${farm.state})`}
       />
 
       {error && (
@@ -96,32 +97,32 @@ export default function WeatherPage() {
         <>
           {/* Current Weather Card */}
           <Card className="mb-6">
-            <h2 className="text-lg font-bold text-kisan-charcoal mb-4 flex items-center gap-2">
-              <span aria-hidden="true">🌤️</span> Current Conditions
+            <h2 className="text-lg font-bold text-emerald-950 mb-4 flex items-center gap-2">
+              <span aria-hidden="true">🌤️</span> {t.currentConditions}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-kisan-earth-50 rounded-xl px-4 py-3">
-                <p className="text-[10px] text-kisan-text-light uppercase font-semibold">Temperature</p>
-                <p className="text-xl font-bold text-kisan-charcoal">{weather.temperature}°C</p>
+              <div className="bg-emerald-50/60 rounded-xl px-4 py-3">
+                <p className="text-[10px] text-emerald-700 uppercase font-semibold">Temperature</p>
+                <p className="text-xl font-bold text-emerald-950">{weather.temperature}°C</p>
               </div>
-              <div className="bg-kisan-earth-50 rounded-xl px-4 py-3">
-                <p className="text-[10px] text-kisan-text-light uppercase font-semibold">Rainfall (last 3h)</p>
-                <p className="text-xl font-bold text-kisan-charcoal">{weather.rainfall} mm</p>
+              <div className="bg-emerald-50/60 rounded-xl px-4 py-3">
+                <p className="text-[10px] text-emerald-700 uppercase font-semibold">{t.rainfallLabel}</p>
+                <p className="text-xl font-bold text-emerald-950">{weather.rainfall} mm</p>
               </div>
-              <div className="bg-kisan-earth-50 rounded-xl px-4 py-3">
-                <p className="text-[10px] text-kisan-text-light uppercase font-semibold">Humidity</p>
-                <p className="text-xl font-bold text-kisan-charcoal">{weather.humidity}%</p>
+              <div className="bg-emerald-50/60 rounded-xl px-4 py-3">
+                <p className="text-[10px] text-emerald-700 uppercase font-semibold">{t.humidityLabel}</p>
+                <p className="text-xl font-bold text-emerald-950">{weather.humidity}%</p>
               </div>
-              <div className="bg-kisan-earth-50 rounded-xl px-4 py-3">
-                <p className="text-[10px] text-kisan-text-light uppercase font-semibold">Wind Speed</p>
-                <p className="text-xl font-bold text-kisan-charcoal">{weather.wind_speed} m/s</p>
+              <div className="bg-emerald-50/60 rounded-xl px-4 py-3">
+                <p className="text-[10px] text-emerald-700 uppercase font-semibold">{t.windSpeedLabel}</p>
+                <p className="text-xl font-bold text-emerald-950">{weather.wind_speed} m/s</p>
               </div>
             </div>
           </Card>
 
           {/* Risk Alerts */}
-          <h2 className="text-lg font-bold text-kisan-charcoal mb-4">
-            Farming Risk Alerts
+          <h2 className="text-lg font-bold text-emerald-950 mb-4">
+            {t.riskAlertsTitle}
           </h2>
           {weather.risk_alerts && weather.risk_alerts.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 mb-8">
@@ -153,8 +154,8 @@ export default function WeatherPage() {
           {/* Forecast */}
           {weather.forecast && weather.forecast.length > 0 && (
             <>
-              <h2 className="text-lg font-bold text-kisan-charcoal mb-4">
-                5-Day Forecast Summary
+              <h2 className="text-lg font-bold text-emerald-950 mb-4">
+                {t.forecastTitle}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                 {weather.forecast.map((day, idx) => {
@@ -163,8 +164,8 @@ export default function WeatherPage() {
                     ? parsedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
                     : day.date;
                   return (
-                    <div key={idx} className="bg-white border border-kisan-border rounded-xl p-3 text-center flex flex-col items-center">
-                      <p className="text-xs font-semibold text-kisan-text-light mb-1">{dateLabel}</p>
+                    <div key={idx} className="bg-white border border-emerald-100 rounded-xl p-3 text-center flex flex-col items-center shadow-xs">
+                      <p className="text-xs font-semibold text-emerald-700 mb-1">{dateLabel}</p>
                       {day.icon && (
                         <img 
                           src={`https://openweathermap.org/img/wn/${day.icon}.png`} 
@@ -172,14 +173,14 @@ export default function WeatherPage() {
                           className="w-10 h-10 my-1"
                         />
                       )}
-                      <p className="text-sm font-bold text-kisan-charcoal mb-1">
+                      <p className="text-sm font-bold text-emerald-950 mb-1">
                         {Math.round(day.temp_max)}°C
                       </p>
-                      <p className="text-[10px] text-kisan-text-light capitalize truncate w-full">
+                      <p className="text-[10px] text-emerald-700/80 capitalize truncate w-full">
                         {day.description}
                       </p>
                       {day.rainfall > 0 && (
-                        <p className="text-[10px] font-semibold text-kisan-sky-500 mt-1">
+                        <p className="text-[10px] font-semibold text-sky-600 mt-1">
                           {day.rainfall.toFixed(1)} mm
                         </p>
                       )}

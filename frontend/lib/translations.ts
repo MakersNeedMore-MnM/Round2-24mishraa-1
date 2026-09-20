@@ -10,7 +10,25 @@ export interface Translations {
   navActionPlan: string;
   navFollowUp: string;
   selectLanguage: string;
-  
+
+  // Dashboard
+  greeting: string;
+  farmOverviewSub: string;
+  farmLocation: string;
+  cropLabel: string;
+  stageLabel: string;
+  soilLabel: string;
+  waterLabel: string;
+  todaysOverview: string;
+  highestRisk: string;
+  whatWouldYouLikeToDo: string;
+  ready: string;
+  getRecommendation: string;
+  checkWeather: string;
+  analyzeCrop: string;
+  viewActions: string;
+  trackProgress: string;
+
   // Disease Doctor
   diseaseTitle: string;
   diseaseSubtitle: string;
@@ -34,7 +52,7 @@ export interface Translations {
   districtLabel: string;
   targetCropLabel: string;
   soilTypeLabel: string;
-  waterLabel: string;
+  waterAvailabilityLabel: string;
   seasonLabel: string;
   evaluateButton: string;
   manualCropLabel: string;
@@ -43,6 +61,35 @@ export interface Translations {
   suitabilityScore: string;
   riskLevel: string;
   factorsTitle: string;
+
+  // Weather Page
+  weatherTitle: string;
+  weatherSubtitle: string;
+  currentConditions: string;
+  humidityLabel: string;
+  windSpeedLabel: string;
+  rainfallLabel: string;
+  riskAlertsTitle: string;
+  forecastTitle: string;
+
+  // Action Plan Page
+  actionTitle: string;
+  actionSubtitle: string;
+  actionProgress: string;
+  tasksCompleted: string;
+  recommendedSteps: string;
+  timelineLabel: string;
+
+  // Follow-up Page
+  followupTitle: string;
+  followupSubtitle: string;
+  uploadFollowupTitle: string;
+  uploadFollowupSub: string;
+  compareButton: string;
+  recoveryStatus: string;
+  improvingStatus: string;
+  stableStatus: string;
+  worseningStatus: string;
 
   // Common Crops
   crops: Record<string, string>;
@@ -59,6 +106,23 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "Action Plan",
     navFollowUp: "Follow-up",
     selectLanguage: "Language / भाषा",
+
+    greeting: "Good day, Farmer",
+    farmOverviewSub: "Here's your farm overview and tools.",
+    farmLocation: "Farm Location",
+    cropLabel: "Crop",
+    stageLabel: "Stage",
+    soilLabel: "Soil",
+    waterLabel: "Water",
+    todaysOverview: "Today's Overview",
+    highestRisk: "HIGHEST RISK",
+    whatWouldYouLikeToDo: "What would you like to do?",
+    ready: "Ready",
+    getRecommendation: "Get Recommendation →",
+    checkWeather: "Check Weather →",
+    analyzeCrop: "Analyze Crop →",
+    viewActions: "View Actions →",
+    trackProgress: "Track Progress →",
 
     diseaseTitle: "AI Disease Doctor 🔬",
     diseaseSubtitle: "Upload crop leaf photo for instant AI diagnosis & treatment.",
@@ -81,7 +145,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     districtLabel: "District",
     targetCropLabel: "Target Crop",
     soilTypeLabel: "Soil Type",
-    waterLabel: "Water Availability",
+    waterAvailabilityLabel: "Water Availability",
     seasonLabel: "Sowing Season",
     evaluateButton: "Re-evaluate Suitability",
     manualCropLabel: "Enter Custom Crop Name",
@@ -90,6 +154,32 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     suitabilityScore: "Suitability Score",
     riskLevel: "Risk Level",
     factorsTitle: "Suitability Factors Breakdown",
+
+    weatherTitle: "Weather Intelligence & Risk Alert 🌦️",
+    weatherSubtitle: "Real-time microclimate metrics and agricultural hazard warnings.",
+    currentConditions: "Current Weather Conditions",
+    humidityLabel: "Humidity",
+    windSpeedLabel: "Wind Speed",
+    rainfallLabel: "Rainfall",
+    riskAlertsTitle: "Agricultural Risk Alerts",
+    forecastTitle: "5-Day Weather Forecast",
+
+    actionTitle: "Smart Action Plan 📋",
+    actionSubtitle: "Prioritized step-by-step decision support tailored to your crop and weather risks.",
+    actionProgress: "Action Plan Progress",
+    tasksCompleted: "tasks completed",
+    recommendedSteps: "Recommended Action Steps",
+    timelineLabel: "Timeline:",
+
+    followupTitle: "Crop Recovery Monitoring 🔄",
+    followupSubtitle: "Track treatment progress and leaf recovery over time.",
+    uploadFollowupTitle: "Upload Follow-up Leaf Photo",
+    uploadFollowupSub: "Upload a new photo of the treated leaf to evaluate recovery.",
+    compareButton: "Compare Recovery Progress 🔍",
+    recoveryStatus: "Recovery Status",
+    improvingStatus: "IMPROVING",
+    stableStatus: "STABLE",
+    worseningStatus: "WORSENING",
 
     crops: {
       cotton: "Cotton",
@@ -112,6 +202,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       custom: "Custom / Other (Type Manually)"
     }
   },
+
   hi: {
     appName: "KIsanIQ (किसानIQ)",
     tagline: "केवल बीमारी न पहचानें। आगे क्या करना है, यह तय करें।",
@@ -122,6 +213,23 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "कार्य योजना (Action Plan)",
     navFollowUp: "निगरानी (Follow-up)",
     selectLanguage: "भाषा चुनें (Language)",
+
+    greeting: "नमस्ते, किसान भाई",
+    farmOverviewSub: "यहाँ आपके खेत का विवरण और उपकरण दिए गए हैं।",
+    farmLocation: "खेत का स्थान",
+    cropLabel: "फसल",
+    stageLabel: "चरण (Stage)",
+    soilLabel: "मिट्टी",
+    waterLabel: "पानी",
+    todaysOverview: "आज की स्थिति (Today's Overview)",
+    highestRisk: "उच्चतम जोखिम (Highest Risk)",
+    whatWouldYouLikeToDo: "आप क्या करना चाहते हैं?",
+    ready: "तैयार",
+    getRecommendation: "फसल सिफारिश देखें →",
+    checkWeather: "मौसम जांचें →",
+    analyzeCrop: "फसल की जांच करें →",
+    viewActions: "कार्य योजना देखें →",
+    trackProgress: "प्रगति ट्रैक करें →",
 
     diseaseTitle: "AI फसल बीमारी डॉक्टर 🔬",
     diseaseSubtitle: "फसल के पत्ते की फोटो अपलोड करें और तुरंत सटीक इलाज पाएं।",
@@ -144,7 +252,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     districtLabel: "जिला (District)",
     targetCropLabel: "चुनी गई फसल",
     soilTypeLabel: "मिट्टी का प्रकार",
-    waterLabel: "पानी की उपलब्धता",
+    waterAvailabilityLabel: "पानी की उपलब्धता",
     seasonLabel: "बुवाई का मौसम",
     evaluateButton: "उपयुक्तता की पुनः जांच करें",
     manualCropLabel: "अपनी फसल का नाम दर्ज करें",
@@ -153,6 +261,32 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     suitabilityScore: "उपयुक्तता स्कोर",
     riskLevel: "जोखिम स्तर (Risk Level)",
     factorsTitle: "उपयुक्तता कारणों का विवरण",
+
+    weatherTitle: "मौसम पूर्वानुमान व जोखिम अलर्ट 🌦️",
+    weatherSubtitle: "मौसम की स्थिति, वर्षा का अनुमान और कृषि सुरक्षा चेतावनी।",
+    currentConditions: "वर्तमान मौसम की स्थिति",
+    humidityLabel: "नमी (Humidity)",
+    windSpeedLabel: "हवा की गति",
+    rainfallLabel: "बारिश (Rainfall)",
+    riskAlertsTitle: "कृषि जोखिम चेतावनियां",
+    forecastTitle: "5-दिन का मौसम पूर्वानुमान",
+
+    actionTitle: "स्मार्ट कार्य योजना 📋",
+    actionSubtitle: "आपकी फसल और मौसम के अनुसार प्राथमिकता-आधारित कदम।",
+    actionProgress: "कार्य योजना की प्रगति",
+    tasksCompleted: "कार्य पूरे हुए",
+    recommendedSteps: "अनुशंसित कदम",
+    timelineLabel: "समय सीमा:",
+
+    followupTitle: "फसल सुधार निगरानी 🔄",
+    followupSubtitle: "इलाज के बाद फसल और पत्ते के सुधार की जांच करें।",
+    uploadFollowupTitle: "सुधार जांच के लिए पत्ते की फोटो अपलोड करें",
+    uploadFollowupSub: "उपचारित पत्ते की नई फोटो अपलोड करके सुधार का आकलन करें।",
+    compareButton: "सुधार की तुलना करें 🔍",
+    recoveryStatus: "सुधार की स्थिति (Status)",
+    improvingStatus: "सुधार हो रहा है (IMPROVING)",
+    stableStatus: "स्थिर है (STABLE)",
+    worseningStatus: "स्थिति बिगड़ रही है (WORSENING)",
 
     crops: {
       cotton: "कपास (Cotton)",
@@ -175,6 +309,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       custom: "✍️ अन्य फसल (खुद नाम लिखें)"
     }
   },
+
   mr: {
     appName: "KIsanIQ (किसानIQ)",
     tagline: "फक्त रोग शोधू नका. पुढे काय करायचे ते ठरवा.",
@@ -185,6 +320,23 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "कृती योजना (Action Plan)",
     navFollowUp: "पाठपुरावा (Follow-up)",
     selectLanguage: "भाषा निवडा (Language)",
+
+    greeting: "नमस्कार, शेतकरी बांधवांनो",
+    farmOverviewSub: "येथे तुमच्या शेताची माहिती आणि साधने दिली आहेत.",
+    farmLocation: "शेताचे ठिकाण",
+    cropLabel: "पिक",
+    stageLabel: "टप्पा (Stage)",
+    soilLabel: "माती",
+    waterLabel: "पाणी",
+    todaysOverview: "आजची परिस्थिती (Today's Overview)",
+    highestRisk: "सर्वाधिक धोका (Highest Risk)",
+    whatWouldYouLikeToDo: "तुम्हाला काय करायचे आहे?",
+    ready: "तयार",
+    getRecommendation: "पिक शिफारस पहा →",
+    checkWeather: "हवामान तपासा →",
+    analyzeCrop: "पानाची तपासणी करा →",
+    viewActions: "कृती योजना पहा →",
+    trackProgress: "प्रगती तपासा →",
 
     diseaseTitle: "AI पिक रोग डॉक्टर 🔬",
     diseaseSubtitle: "पिकाच्या पानाचा फोटो अपलोड करा आणि अचूक निदान व उपाय मिळवा.",
@@ -207,7 +359,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     districtLabel: "जिल्हा (District)",
     targetCropLabel: "निवडलेले पिक",
     soilTypeLabel: "मातीचा प्रकार",
-    waterLabel: "पाण्याची उपलब्धता",
+    waterAvailabilityLabel: "पाण्याची उपलब्धता",
     seasonLabel: "पेरणीचा हंगाम",
     evaluateButton: "योग्यतेची तपासणी करा",
     manualCropLabel: "पिकाचे नाव टाका",
@@ -216,6 +368,32 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     suitabilityScore: "योग्यतेचे गुण (Suitability)",
     riskLevel: "धोक्याची पातळी (Risk)",
     factorsTitle: "योग्यतेचे घटक",
+
+    weatherTitle: "हवामान अंदाज आणि धोका इशारे 🌦️",
+    weatherSubtitle: "हवामानाची माहिती, पावसाचा अंदाज आणि शेती सुरक्षेच्या सूचना.",
+    currentConditions: "सध्याचे हवामान",
+    humidityLabel: "आर्द्रता (Humidity)",
+    windSpeedLabel: "वाऱ्याचा वेग",
+    rainfallLabel: "पाऊस (Rainfall)",
+    riskAlertsTitle: "शेती धोक्याचे इशारे",
+    forecastTitle: "५ दिवसांचा हवामान अंदाज",
+
+    actionTitle: "स्मार्ट कृती योजना 📋",
+    actionSubtitle: "पिक आणि हवामानानुसार टप्प्याटप्प्याने मार्गदर्शक कृती.",
+    actionProgress: "कृती योजनेची प्रगती",
+    tasksCompleted: "कामे पूर्ण झाली",
+    recommendedSteps: "सुचवलेल्या कृती",
+    timelineLabel: "कालावधी:",
+
+    followupTitle: "पिक सुधारणा पाठपुरावा 🔄",
+    followupSubtitle: "औषध फवारणीनंतर पानातील सुधारणा तपासा.",
+    uploadFollowupTitle: "सुधारणा तपासण्यासाठी पानाचा नवा फोटो अपलोड करा",
+    uploadFollowupSub: "नवीन फोटो अपलोड करून रोगातील घट तपासा.",
+    compareButton: "सुधारणेची तुलना करा 🔍",
+    recoveryStatus: "सुधारणेची स्थिती",
+    improvingStatus: "सुधारणा होत आहे (IMPROVING)",
+    stableStatus: "स्थिर आहे (STABLE)",
+    worseningStatus: "स्थिती बिघडत आहे (WORSENING)",
 
     crops: {
       cotton: "कापूस (Cotton)",
@@ -238,6 +416,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       custom: "✍️ इतर पिक (स्वतः नाव लिहा)"
     }
   },
+
   te: {
     appName: "KIsanIQ (కిసాన్IQ)",
     tagline: "సమస్యను గుర్తించడమే కాదు. తదుపరి ఏమి చేయాలో నిర్ణయించండి.",
@@ -248,6 +427,23 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "కార్యాచరణ ప్రణాళిక (Action Plan)",
     navFollowUp: "ఫాలో-అప్ (Follow-up)",
     selectLanguage: "భాష ఎంచుకోండి (Language)",
+
+    greeting: "నమస్కారం, రైతు సోదరా",
+    farmOverviewSub: "ఇక్కడ మీ పొలం వివరాలు మరియు సాధనాలు ఉన్నాయి.",
+    farmLocation: "పొలం ప్రదేశం",
+    cropLabel: "పంట",
+    stageLabel: "దశ (Stage)",
+    soilLabel: "నేల",
+    waterLabel: "నీరు",
+    todaysOverview: "ఈరోజు సమాచారం (Today's Overview)",
+    highestRisk: "అత్యధిక ప్రమాదం (Highest Risk)",
+    whatWouldYouLikeToDo: "మీరు ఏమి చేయాలనుకుంటున్నారు?",
+    ready: "సిద్ధంగా ఉంది",
+    getRecommendation: "పంట సిఫార్సు చూడండి →",
+    checkWeather: "వాతావరణం చూడండి →",
+    analyzeCrop: "ఆకును విశ్లేషించండి →",
+    viewActions: "కార్యాచరణ చూడండి →",
+    trackProgress: "పురోగతి చూడండి →",
 
     diseaseTitle: "AI పంట తెగులు డాక్టర్ 🔬",
     diseaseSubtitle: "పంట ఆకు ఫోటో అప్‌లోడ్ చేసి తక్షణ నివారణ పొందండి.",
@@ -270,7 +466,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     districtLabel: "జిల్లా (District)",
     targetCropLabel: "ఎంచుకున్న పంట",
     soilTypeLabel: "నేల రకం",
-    waterLabel: "నీటి లభ్యత",
+    waterAvailabilityLabel: "నీటి లభ్యత",
     seasonLabel: "పంట కాలం (Season)",
     evaluateButton: "మళ్లీ తనిఖీ చేయండి",
     manualCropLabel: "పంట పేరు నమోదు చేయండి",
@@ -279,6 +475,32 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     suitabilityScore: "అనుకూలత స్కోరు",
     riskLevel: "ప్రమాద స్థాయి (Risk Level)",
     factorsTitle: "అనుకూలత విశ్లేషణ",
+
+    weatherTitle: "వాతావరణం మరియు ప్రమాద హెచ్చరికలు 🌦️",
+    weatherSubtitle: "తక్షణ వాతావరణం మరియు వ్యవసాయ భద్రతా హెచ్చరికలు.",
+    currentConditions: "ప్రస్తుత వాతావరణం",
+    humidityLabel: "తేమ (Humidity)",
+    windSpeedLabel: "గాలి వేగం",
+    rainfallLabel: "వర్షపాతం (Rainfall)",
+    riskAlertsTitle: "వ్యవసాయ ప్రమాద హెచ్చరికలు",
+    forecastTitle: "5 రోజు అంచనా",
+
+    actionTitle: "కార్యాచరణ ప్రణాళిక 📋",
+    actionSubtitle: "మీ పంట ఆధారంగా దశలవారీ నివారణ చర్యలు.",
+    actionProgress: "ప్రణాళిక పురోగతి",
+    tasksCompleted: "పూర్తయిన పనులు",
+    recommendedSteps: "సిఫార్సు చేసిన చర్యలు",
+    timelineLabel: "సమయం:",
+
+    followupTitle: "పంట కోలుకునే ప్రక్రియ 🔄",
+    followupSubtitle: "చికిత్స తర్వాత ఆకు కోలుకునే విధానాన్ని పరిశీలించండి.",
+    uploadFollowupTitle: "కొత్త ఆకు ఫోటోను అప్‌లోడ్ చేయండి",
+    uploadFollowupSub: "మార్పులను పరిశీలించడానికి కొత్త ఫోటోను ఉపయోగించండి.",
+    compareButton: "పోల్చి చూడండి 🔍",
+    recoveryStatus: "కోలుకునే స్థితి",
+    improvingStatus: "మెరుగుపడుతోంది (IMPROVING)",
+    stableStatus: "స్థిరంగా ఉంది (STABLE)",
+    worseningStatus: "పాడవుతోంది (WORSENING)",
 
     crops: {
       cotton: "పత్తి (Cotton)",
@@ -301,6 +523,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       custom: "✍️ ఇతర పంట (మాన్యువల్‌గా నమోదు చేయండి)"
     }
   },
+
   ta: {
     appName: "KIsanIQ (கிசான்IQ)",
     tagline: "பிரச்சனையை மட்டும் கண்டறிய வேண்டாம். அடுத்து என்ன செய்வது என்று నిర్ణயியுங்கள்.",
@@ -311,6 +534,23 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     navActionPlan: "செயல் திட்டம் (Action Plan)",
     navFollowUp: "பின்தொடர்தல் (Follow-up)",
     selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
+
+    greeting: "வணக்கம், விவசாய தோழரே",
+    farmOverviewSub: "இங்கே உங்கள் பண்ணை கண்ணோட்டம் மற்றும் கருவிகள் உள்ளன.",
+    farmLocation: "பண்ணை இடம்",
+    cropLabel: "பயிர்",
+    stageLabel: "நிலை (Stage)",
+    soilLabel: "மண்",
+    waterLabel: "நீர்",
+    todaysOverview: "இன்றைய கண்ணோட்டம் (Today's Overview)",
+    highestRisk: "அதிகபட்ச அபாயம் (Highest Risk)",
+    whatWouldYouLikeToDo: "நீங்கள் என்ன செய்ய விரும்புகிறீர்கள்?",
+    ready: "தயார்",
+    getRecommendation: "பரிந்துரை பெறுக →",
+    checkWeather: "வானிலை பார்க்க →",
+    analyzeCrop: "இலையை ஆய்வு செய்ய →",
+    viewActions: "செயல் திட்டம் பார்க்க →",
+    trackProgress: "முன்னேற்றம் பார்க்க →",
 
     diseaseTitle: "AI பயிர் நோய் மருத்துவர் 🔬",
     diseaseSubtitle: "பயிர் இலையின் புகைப்படத்தைப் பதிவேற்றி உடனடி தீர்வு பெறவும்.",
@@ -333,7 +573,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     districtLabel: "மாவட்டம் (District)",
     targetCropLabel: "தேர்ந்தெடுக்கப்பட்ட பயிர்",
     soilTypeLabel: "மண் வகை",
-    waterLabel: "நீர் उपलब्धता",
+    waterAvailabilityLabel: "நீர் उपलब्धता",
     seasonLabel: "பருவம் (Season)",
     evaluateButton: "மீண்டும் ஆய்வு செய்",
     manualCropLabel: "பயிரின் பெயரை உள்ளிடவும்",
@@ -342,6 +582,32 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     suitabilityScore: "பொருத்தமான மதிப்பெண்",
     riskLevel: "அபாய நிலை",
     factorsTitle: "காரணிகள் பகுப்பாய்வு",
+
+    weatherTitle: "வானிலை மற்றும் அபாய எச்சரிக்கைகள் 🌦️",
+    weatherSubtitle: "நிகழ்நேர காலநிலை மற்றும் விவசாய பாதுகாப்பு எச்சரிக்கைகள்.",
+    currentConditions: "தற்போதைய வானிலை",
+    humidityLabel: "ஈரப்பதம் (Humidity)",
+    windSpeedLabel: "காற்றின் வேகம்",
+    rainfallLabel: "மழை அளவு (Rainfall)",
+    riskAlertsTitle: "விவசாய அபாய எச்சரிக்கைகள்",
+    forecastTitle: "5 நாள் கணிப்பு",
+
+    actionTitle: "செயல் திட்டம் 📋",
+    actionSubtitle: "உங்கள் பயிருக்கு ஏற்ற முன்னுரிமை நடவடிக்கைகள்.",
+    actionProgress: "திட்ட முன்னேற்றம்",
+    tasksCompleted: "முடிந்த பணிகள்",
+    recommendedSteps: "பரிந்துரைக்கப்பட்ட படிகள்",
+    timelineLabel: "காலக்கெடு:",
+
+    followupTitle: "பயிர் மீட்பு கண்காணிப்பு 🔄",
+    followupSubtitle: "சிகிச்சைக்குப் பின் இலையின் மீட்பைக் கண்காணிக்கவும்.",
+    uploadFollowupTitle: "புதிய புகைப்படத்தைப் பதிவேற்றவும்",
+    uploadFollowupSub: "மீட்பை மதிப்பிட புதிய படத்தைப் பயன்படுத்தவும்.",
+    compareButton: "ஒப்பிட்டுப் பார்க்க 🔍",
+    recoveryStatus: "மீட்பு நிலை",
+    improvingStatus: "மேம்படுகிறது (IMPROVING)",
+    stableStatus: "சீராக உள்ளது (STABLE)",
+    worseningStatus: "மோசமடைகிறது (WORSENING)",
 
     crops: {
       cotton: "பருத்தி (Cotton)",
