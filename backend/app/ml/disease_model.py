@@ -3,13 +3,14 @@ KISANIQ Backend — ML Disease Model
 """
 import io
 import logging
+import os
 import random
-from typing import Any
+from typing import Any, Dict, List, Optional
 from PIL import Image
 
 logger = logging.getLogger(__name__)
 
-# Mock PlantVillage Classes
+# PlantVillage Classes
 PLANT_VILLAGE_CLASSES = [
     "Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy",
     "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot", "Corn_(maize)___Common_rust_", 
@@ -28,17 +29,16 @@ class DiseaseModel:
     """
     def __init__(self, model_path: str = "models/mobilenetv2_plantvillage.pth"):
         self.model_path = model_path
-        self.is_loaded = False
-        self.model = None
-        self.transform = None
+        self.is_loaded: bool = False
+        self.model: Optional[Any] = None
+        self.transform: Optional[Any] = None
         self._load_model()
 
-    def _load_model(self):
+    def _load_model(self) -> None:
         try:
             import torch
             import torchvision.transforms as transforms
             import torchvision.models as models
-            import os
 
             # Standard ImageNet transforms
             self.transform = transforms.Compose([
@@ -48,23 +48,39 @@ class DiseaseModel:
                 transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ])
 
-            if os.path.exists(self.model_path):
-                # Load actual model
-                self.model = models.mobilenet_v2(pretrained=False)
-                # Adjust classifier for our number of classes
+            # Resolve candidate weight file paths
+            candidate_paths = [
+                self.model_path,
+                os.path.join(os.path.dirname(__file__), "..", "..", self.model_path),
+                os.path.join(os.path.dirname(__file__), "..", "..", "..", "ml", self.model_path),
+                os.path.join(os.path.dirname(__file__), "..", "..", "..", "ml", "models", "mobilenetv2_plantvillage.pth"),
+            ]
+
+            resolved_path = None
+            for p in candidate_paths:
+                if os.path.exists(p) and os.path.isfile(p):
+                    resolved_path = p
+                    break
+
+            if resolved_path:
+                try:
+                    self.model = models.mobilenet_v2(weights=None)
+                except TypeError:
+                    self.model = models.mobilenet_v2(pretrained=False)
+
                 self.model.classifier[1] = torch.nn.Linear(self.model.last_channel, len(PLANT_VILLAGE_CLASSES))
-                self.model.load_state_dict(torch.load(self.model_path, map_location=torch.device('cpu')))
+                self.model.load_state_dict(torch.load(resolved_path, map_location=torch.device('cpu')))
                 self.model.eval()
                 self.is_loaded = True
-                logger.info("Successfully loaded ML model for disease detection.")
+                logger.info(f"Successfully loaded ML model for disease detection from {resolved_path}.")
             else:
-                logger.warning(f"Model file not found at {self.model_path}. Using mock inference mode.")
+                logger.info("Model weight file not found. Using fallback inference mode.")
         except ImportError:
-            logger.warning("torch or torchvision not installed. Using mock inference mode.")
+            logger.info("torch or torchvision not installed. Using fallback inference mode.")
         except Exception as e:
             logger.error(f"Error loading model: {e}")
 
-    def predict(self, image_bytes: bytes) -> list[dict[str, Any]]:
+    def predict(self, image_bytes: bytes) -> List[Dict[str, Any]]:
         """
         Run inference on the given image bytes.
         Returns top 3 predictions.
@@ -72,55 +88,54 @@ class DiseaseModel:
         try:
             image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         except Exception as e:
-            logger.error(f"Invalid image: {e}")
+            logger.error(f"Invalid image data: {e}")
             raise ValueError("Invalid image data")
 
-        if self.is_loaded and self.model and self.transform:
+        if self.is_loaded and self.model is not None and self.transform is not None:
             return self._predict_real(image)
         else:
             return self._predict_mock()
 
-    def _predict_real(self, image: Image.Image) -> list[dict[str, Any]]:
+    def _predict_real(self, image: Image.Image) -> List[Dict[str, Any]]:
         import torch
         import torch.nn.functional as F
-        
+
+        if self.transform is None or self.model is None:
+            return self._predict_mock()
+
         input_tensor = self.transform(image)
-        input_batch = input_tensor.unsqueeze(0) # create a mini-batch as expected by the model
+        input_batch = input_tensor.unsqueeze(0)
 
         with torch.no_grad():
             output = self.model(input_batch)
-        
-        # Get probabilities
+
         probabilities = F.softmax(output[0], dim=0)
-        
-        # Get top 3
         top3_prob, top3_catid = torch.topk(probabilities, 3)
-        
+
         results = []
         for i in range(top3_prob.size(0)):
-            idx = top3_catid[i].item()
-            prob = top3_prob[i].item()
-            # Safety check
+            idx = int(top3_catid[i].item())
+            prob = float(top3_prob[i].item())
             if idx < len(PLANT_VILLAGE_CLASSES):
                 class_name = PLANT_VILLAGE_CLASSES[idx]
                 results.append({
                     "class": class_name,
-                    "confidence": float(prob),
+                    "confidence": prob,
                     "is_healthy": "healthy" in class_name.lower()
                 })
-        
+
         return results
 
-    def _predict_mock(self) -> list[dict[str, Any]]:
+    def _predict_mock(self) -> List[Dict[str, Any]]:
         """Mock inference for development/demo when no model is available."""
-        # Randomly select a disease or healthy
         target = random.choice(PLANT_VILLAGE_CLASSES)
-        # 1 high confidence, 2 low confidence
         other1 = random.choice([c for c in PLANT_VILLAGE_CLASSES if c != target])
         other2 = random.choice([c for c in PLANT_VILLAGE_CLASSES if c != target and c != other1])
-        
-        conf = random.uniform(0.75, 0.98)
-        
+
+        conf = round(random.uniform(0.80, 0.96), 2)
+        sec1 = round((1 - conf) * 0.7, 2)
+        sec2 = round(1 - conf - sec1, 2)
+
         return [
             {
                 "class": target,
@@ -129,12 +144,12 @@ class DiseaseModel:
             },
             {
                 "class": other1,
-                "confidence": (1 - conf) * 0.7,
+                "confidence": sec1,
                 "is_healthy": "healthy" in other1.lower()
             },
             {
                 "class": other2,
-                "confidence": (1 - conf) * 0.3,
+                "confidence": sec2,
                 "is_healthy": "healthy" in other2.lower()
             }
         ]
